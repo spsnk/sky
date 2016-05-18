@@ -6,12 +6,12 @@
 <link rel="stylesheet" type="text/css" href="css/main.css" />
 <link rel="stylesheet" type="text/css" href="css/redmond/jquery-ui-1.8.16.custom.css" />
 <link rel="shortcut icon" type="image/x-icon" href="favicon.ico" />
-<script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.min.js"></script>
-<!--<script type="text/javascript" src="js/jquery.min.js"></script>-->
+<!--<script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.min.js"></script>
+<script type="text/javascript" src="js/jquery.min.js"></script>
 <script type="text/javascript" src="js/jquery-ui-1.8.14.custom.min.js"></script>
-<script type="text/javascript" src="js/jquery-ui.min.js"></script>
-<!--<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>-->
-<!--<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1/jquery-ui.min.js"></script>-->
+<script type="text/javascript" src="js/jquery-ui.min.js"></script>-->
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1/jquery-ui.min.js"></script>
 <script type="text/javascript" src="js/jquery.form.js"></script>
 <script type="text/javascript" src="js/jquery.validate.min.js"></script>
 <script type="text/javascript" src="js/jquery.maskedinput-1.3.min.js"></script>
@@ -23,21 +23,24 @@
 		<!-- Begin Left Column -->
 		<div id="nav" class="hud">
 			<div id="menu">
-				<a href="ui/channel.php" class="ajax">
-				<div class="flechita"></div>
-				Canales </a>
-				<a href="ui/pack.php" class="ajax">
-				<div class="flechita"></div>
-				Paquetes </a>
-				<a href="ui/client.php" class="ajax">
-				<div class="flechita"></div>
-				Clientes </a>
-				<a href="ui/service.php" class="ajax">
-				<div class="flechita"></div>
-				Servicios </a>
 				<a href="ui/employee.php" class="ajax">
 				<div class="flechita"></div>
 				Empleados </a>
+				<a href="ui/service.php" class="ajax">
+				<div class="flechita"></div>
+				Servicios </a>
+				<a href="ui/channel.php" class="ajax">
+				<div class="flechita"></div>
+				Canales </a>
+				<a href="ui/package.php" class="ajax">
+				<div class="flechita"></div>
+				Paquetes </a>
+				<a href="ui/equipment.php" class="ajax">
+				<div class="flechita"></div>
+				Equipos </a>
+				<a href="ui/client.php" class="ajax">
+				<div class="flechita"></div>
+				Clientes </a>
 				<a href="ui/payment.php" class="ajax">
 				<div class="flechita"></div>
 				Pagos </a>

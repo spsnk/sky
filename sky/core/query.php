@@ -10,6 +10,55 @@ $count=NULL;
 $types=NULL;
 $schools=NULL;
 switch($nya){
+	case 'employee':
+    switch($act){
+      case 'add':
+				$name   = getGETPOST('name');
+				$ap     = getGETPOST('ap');
+				$am     = getGETPOST('am');
+				$hiredt	= getGETPOST('hiredt');
+				$type   = getGETPOST('type');
+        $data = array($name,$ap,$am,$hiredt,$type);
+        switch($type){
+          case 'T':
+          	$area   = getGETPOST('area');
+            try {
+              $sth = $DBH->prepare('INSERT INTO empleado (Nombre,ap,am,fechaContratacion,tipo) VALUES(?,?,?,?,?); SELECT LAST_INSERT_ID() as last');
+              $sth->execute($data);
+              $lastClientId = $sth->fetch();
+              $lastClientId = $lastClientId['last'];
+              $sth = $DBH->prepare('INSERT INTO tecnico (idEmpleado,Area) VALUES(?,?)');
+              $sth->execute(array($lastClientId,$area));
+            } catch(PDOException $e){
+              echo $e->getMessage();
+              die("<br /><b>Application Terminated. $nya->$act</b>");
+            }
+            echo "<br /><b>Sucessfully added Tecnician.</b> <script type='text/javascript'>var lastClient=$lastClientId;</script>";
+          break;
+          case 'A':
+            $salary   = getGETPOST('salary');
+            $hours    = getGETPOST('hours');
+            $pass     = getGETPOST('pass');
+            try {
+              $sth = $DBH->prepare('INSERT INTO empleado (Nombre,ap,am,fechaContratacion,tipo) VALUES(?,?,?,?,?); SELECT LAST_INSERT_ID() as last');
+              $sth->execute($data);
+              $lastClientId = $sth->fetch();
+              $lastClientId = $lastClientId['last'];
+              $sth = $DBH->prepare('INSERT INTO tecnico (idEmpleado,Salario,Horas,password) VALUES(?,?)');
+              $sth->execute(array($lastClientId,$salary,$hours,$pass));
+            } catch(PDOException $e){
+              echo $e->getMessage();
+              die("<br /><b>Application Terminated. $nya->$act</b>");
+            }
+            echo "<br /><b>Sucessfully added Administrative.</b> <script type='text/javascript'>var lastClient=$lastClientId;</script>";
+          break;
+        }
+      break;
+      
+      case 'view':
+      break;
+    }
+  break;
 	case 'client':
 		switch($act){
 			case 'add':	

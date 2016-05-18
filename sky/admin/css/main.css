@@ -152,11 +152,11 @@ a{
 	right: 20px;
 	z-index:-1;
 }
-#client-nav,#stock-nav,#report-nav{
+#client-nav,#employee-nav,#report-nav{
 	/*border-bottom: 1px solid #C2CFF1;*/
 	margin-bottom: 10px;
 }
-#client-nav a,.boton,#stock-nav a,#report-nav a{
+#client-nav a,.boton,#employee-nav a,#report-nav a{
 	/*grisoso
 	background-color: whiteSmoke;
 	background-image: -webkit-linear-gradient(top,#f5f5f5,#f1f1f1);
@@ -175,7 +175,7 @@ a{
 	-webkit-border-radius: 2px;
 	border-radius: 2px;
 }
-#client-nav a:hover,.boton:hover,#stock-nav a:hover,#report-nav a:hover{
+#client-nav a:hover,.boton:hover,#employee-nav a:hover,#report-nav a:hover{
 	background-image: -webkit-linear-gradient(top,#EBEFF9,#CCFCFB);
 	background-image: -moz-linear-gradient(top,#EBEFF9,#CCFCFB);
 	background-image: -ms-linear-gradient(top,#EBEFF9,#CCFCFB);
@@ -189,7 +189,7 @@ a{
 	box-shadow:0 1px 1px rgba(0,0,0,0.1)
 }
 input,select,textarea{
-	color: #aaa;
+	color: #2d2d2d;
 	margin: 2px 5px;
 	border: 1px solid #bbb;
 	-moz-border-radius: 2px;
