@@ -1,0 +1,6 @@
+AddHandler watermarked .jpg
+AddHandler watermarked .jpeg
+AddHandler watermarked .gif
+AddHandler watermarked .png
+
+Action watermarked /watermark/wrapper.php

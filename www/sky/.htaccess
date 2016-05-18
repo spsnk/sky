@@ -1,0 +1,57 @@
+# compress the files
+
+<ifmodule mod_deflate.c>
+	AddOutputFilterByType DEFLATE text/text text/html text/plain text/xml text/css application/x-javascript application/javascript application/x-httpd-php
+#	Remove some bugs
+	#<filesMatch "\\.(html|php|css|js|jpg|jpeg|png|gif)$">
+	#	SetOutputFilter DEFLATE
+	#</filesMatch>
+	BrowserMatch ^Mozilla/4 gzip-only-text/html
+	BrowserMatch ^Mozilla/4\.0[678] no-gzip
+	BrowserMatch \bMSIE !no-gzip !gzip-only-text/html
+	Header append Vary User-Agent
+</ifmodule>
+#End Gzip
+#<ifModule mod_gzip.c>
+#  mod_gzip_on Yes
+#  mod_gzip_dechunk Yes
+#  mod_gzip_item_include file \.(html?|txt|css|js|php|pl)$
+#  mod_gzip_item_include handler ^cgi-script$
+#  mod_gzip_item_include mime ^text/.*
+#  mod_gzip_item_include mime ^application/x-javascript.*
+#  mod_gzip_item_exclude mime ^image/.*
+#  mod_gzip_item_exclude rspheader ^Content-Encoding:.*gzip.*
+#</ifModule>
+
+<ifModule mod_expires.c>
+  ExpiresActive On
+  ExpiresDefault "access plus 1 seconds"
+  ExpiresByType text/html "access plus 216000 seconds"
+  ExpiresByType image/gif "access plus 2592001 seconds"
+  ExpiresByType image/jpeg "access plus 2592001 seconds"
+  ExpiresByType image/png "access plus 2592001 seconds"
+  ExpiresByType text/css "access plus 2592001 seconds"
+  ExpiresByType text/javascript "access plus 2592001 seconds"
+  ExpiresByType application/x-javascript "access plus 216000 seconds"
+</ifModule>
+
+<ifModule mod_headers.c>
+  <filesMatch "\\.(ico|pdf|flv|jpg|jpeg|png|gif|swf)$">
+    Header set Cache-Control "max-age=31556926, public"
+  </filesMatch>
+  <filesMatch "\\.(css|js)$">
+	Header set Cache-Control "max-age=31556926, public"
+  </filesMatch>
+  # <filesMatch "\\.(css)$">
+    # Header set Cache-Control "max-age=604800, public"
+  # </filesMatch>
+  # <filesMatch "\\.(js)$">
+    # Header set Cache-Control "max-age=216000, public"
+  # </filesMatch>
+  <filesMatch "\\.(xml|txt)$">
+    Header set Cache-Control "max-age=216000, public, must-revalidate"
+  </filesMatch>
+  <filesMatch "\\.(html|htm|php)$">
+    Header set Cache-Control "max-age=1, private, must-revalidate"
+  </filesMatch>
+</ifModule>

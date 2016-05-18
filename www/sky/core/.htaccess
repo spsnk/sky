@@ -1,0 +1,6 @@
+# deny all except those indicated here
+#<Limit GET POST PUT>
+ #order deny,allow
+ #deny from all
+ #allow from 127.0.0.1 localhost
+#</Limit>
