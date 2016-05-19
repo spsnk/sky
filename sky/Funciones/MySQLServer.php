@@ -14,24 +14,24 @@ class MySQLServer{
 		$this->base=$base;
 
 		if(!$this->connect()){
-			$this->error= mysql_error();
+			$this->error= mysqli_error($this->conexion);
 			echo $this->error;
 		}
 		else{
 			echo "Ready";
-			mysql_query("SET NAMES 'utf8'",$this.conexion);
+			mysqli_query("SET NAMES 'utf8'",$this.conexion);
 
 		}
 		
 	}
 
 	private function connect(){
-		$this->conexion=mysql_connect($this->hostname,$this->usuario,$this->password);
+		$this->conexion=mysqli_connect($this->hostname,$this->usuario,$this->password);
 		if($this->conexion){
-			mysql_select_db($this->base,$this->conexion);
+			mysqli_select_db($this->conexion,$this->base);
 		}
 		else{
-			$this->error=mysql_error();
+			$this->error=mysqli_error();
 			return false;
 		}
 	}
@@ -39,46 +39,46 @@ class MySQLServer{
 		$valor=stripcslashes($valor);
 		$valor=ltrim($valor);
 		$valor=rtrim($valor);
-		return mysql_real_escape_string($valor);
+		return mysqli_real_escape_string($valor);
 	}
 	public function enviarQuery($query){
 		$tipo=strtoupper(substr($query,0,6));
 		switch ($tipo) {
 			case 'SELECT':
-				$resultado=mysql_query($query,$this->conexion);
+				$resultado=mysqli_query($this->conexion,$query);
 				if(!$resultado){
-					$this->error=mysql_error();
+					$this->error=mysqli_error($this->conexion);
 				}
 				else{
-					if(mysql_num_rows($resultado)==0){
+					if(mysqli_num_rows($resultado)==0){
 						return false;
 					}
 					else{
-						while($f=mysql_fetch_assoc($resultado)){
+						while($f=mysqli_fetch_assoc($resultado)){
 							$r[]=$f;
 						}
-						mysql_free_result($resultado);
+						mysqli_free_result($resultado);
 						return $r;
 					}
 				}
 				break;
 			case 'INSERT':
-				$resultado=mysql_query($query,$this->conexion);
+				$resultado=mysqli_query($this->conexion,$query);
 				if(!$resultado){
-					$this->error=mysql_error();
+					$this->error=mysqli_error();
 				}
 				else{
-					return mysql_insert_id();
+					return mysqli_insert_id();
 				}
 				break;
 			case 'DELETE':
 				case 'UPDATE':
-					$resultado=mysql_query($query,$this->conexion);
+					$resultado=mysqli_query($this->conexion,$query);
 					if(!$resultado){
-						$this->error=mysql_error();
+						$this->error=mysqli_error();
 					}
 					else{
-						$resultado=mysql_affected_rows();
+						$resultado=mysqli_affected_rows();
 					}
 					break;
 			default:
@@ -87,7 +87,7 @@ class MySQLServer{
 		}
 	}
 	public function _destruct(){
-		@mysql_close($this->conexion);
+		@mysqli_close($this->conexion);
 	}
 
 }

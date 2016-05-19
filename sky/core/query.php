@@ -18,13 +18,51 @@ switch($nya){
 				$am     = getGETPOST('am');
 				$hiredt	= getGETPOST('hiredt');
 				$type   = getGETPOST('type');
-        $data = array($name,$ap,$am,$hiredt,$type);
+        if ($_FILES["img"]["error"] > 0 && $_FILES["img"]["error"] != 4){
+					echo ("Error: " . $_FILES["img"]["error"] . "<br />");
+				} else {
+					if( $_FILES["img"]["error"] == 4 ){
+						$filename = "noimage.png";
+						echo("No file Uploaded, default image will be used");
+					} else {
+						if (($_FILES["img"]["type"] != "image/gif")
+							&& ($_FILES["img"]["type"] != "image/jpeg")
+							&& ($_FILES["img"]["type"] != "image/pjpeg")
+							&& ($_FILES["img"]["type"] != "image/png")){
+                echo("Invalid File");
+                $filename = "noimage.png";
+              }
+						echo "Upload: " . $_FILES["img"]["name"] . "<br />";
+						echo "Type: " . $_FILES["img"]["type"] . "<br />";
+						echo "Size: " . ($_FILES["img"]["size"] / 1024) . " Kb<br />";
+						echo "Temp file: " . $_FILES["img"]["tmp_name"]."<br />";
+						$hash = md5_file($_FILES["img"]["tmp_name"]);
+						//$file_basename = substr($filename, 0, strripos($filename, '.')); // strip extention
+						$file_ext = substr($_FILES["img"]["name"], strripos($_FILES["img"]["name"], '.'));
+						if (file_exists(APP_PATH."img/employee/" . $hash . $file_ext)){
+							echo ($_FILES["img"]["name"] . " already exists, entry will be duplicated. ");
+							$filename = $hash . $file_ext;
+						} else {
+							move_uploaded_file($_FILES["img"]["tmp_name"],
+							APP_PATH."img/employee/" . $hash . $file_ext);
+							$filename = $hash . $file_ext;
+							include_once 'image.class.php';
+							$thumb = new thumb_image;
+							$thumb->GenerateThumbFile(APP_PATH . 'img/employee/'. $filename, APP_PATH . 'img/employee/thumb/t_' . $filename);
+							echo "Stored in: " . APP_PATH . "img/employee/" . $filename;
+							echo "<br /> Thumb stored in: " . APP_PATH . "img/employee/thumb/t_" . $filename;
+							echo "<br /><img src='". WEB_PATH . "img/employee/thumb/t_" . $filename ."' /><br />";
+							echo "<br /><img src='". WEB_PATH . "img/employee/" . $filename ."' />";
+						}
+					}
+				}
+        $data = array($name,$ap,$am,$hiredt,$type,$filename);
         switch($type){
           case 'T':
           	$area   = getGETPOST('area');
             try {
               $DBH->beginTransaction();
-              $sth = $DBH->prepare('INSERT INTO empleado (Nombre,ap,am,fechaContratacion,tipo) VALUES(?,?,?,?,?)');
+              $sth = $DBH->prepare('INSERT INTO empleado (Nombre,ap,am,fechaContratacion,tipo,foto) VALUES(?,?,?,?,?)');
               // SELECT LAST_INSERT_ID() as last');
               $sth->execute($data);
               //$lastClientId = $sth->fetch();
