@@ -53,7 +53,7 @@
                         foreach ($Tecnico as $value) {
                            echo ' <div class="col-md-4 text-center">
                 <div class="thumbnail">
-                    <img src="BD Sky/fotos/'.$value["foto"].'"class="img-responsive" style="width:100px;" >
+                    <img src="img/employee/'.$value["foto"].'"class="img-responsive" style="width:100px;" >
                     <div class="caption"><h3>'.$value["nombre"].' '.$value["ap"].' '.$value["am"].'<br>
                         </h3>       
                     </div>
@@ -76,7 +76,7 @@
 
             foreach ($Secre as $value) {
                echo '<div class="col-md-2 col-sm-4 col-xs-6">
-                <img src="BD Sky/fotos/'.$value["foto"].' "class="img-responsive customer-img" >
+                <img src="img/employee/'.$value["foto"].' "class="img-responsive customer-img" >
             </div>';
             }
       
