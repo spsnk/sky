@@ -1,5 +1,5 @@
 <?php
-$nya='stock';
+$nya='employee';
 if(isset($_GET['act'])) 
 	$act=$_GET['act'];
 else
@@ -11,7 +11,7 @@ else
 ?>
 <script type="text/javascript">
 rawr();
-$("#query").load("ui/<?php echo "$nya-$act.php"; ?>","nya=<? echo $nya; ?>&act=<? echo $act; ?>&id=<? echo $id; ?> &max_result=10");
+//$("#query").load("ui/<?php echo "$nya-$act.php"; ?>","nya=<? echo $nya; ?>&act=<? echo $act; ?>&id=<? echo $id; ?> &max_result=10");
 </script>
 <h1>Empleados</h1>
 <div id="employee-nav">

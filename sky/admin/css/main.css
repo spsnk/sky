@@ -197,9 +197,17 @@ input,select,textarea{
 	border-radius: 2px;
 	padding: 1px;
 }
+label{
+	padding: 1px;
+	color: #2d2d2d;
+	margin: 2px 5px;
+}
+input:invalid,select:invalid,textarea:invalid{
+	color: #ccc;
+}
 select {
 	height: 20px;
-	width: 155px;
+	width: 173px;
 }
 /* input.disabled{
 	color:#2d2d2d;

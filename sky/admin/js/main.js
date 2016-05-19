@@ -648,7 +648,7 @@ $(window).resize(function(){
 $(document).ready(function(){
 	//rezisenya();
 	rawr();
-	setTimeout(function(){info(60*5);},2000);
+	//setTimeout(function(){info(60*5);},2000);
 	bindAjax($(document));
 	//$("#rightcolumn").load("core/core.php","nya=home");
 	$('#toggle').click(function(){

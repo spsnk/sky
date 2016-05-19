@@ -25,7 +25,7 @@ try {
 	echo $e->getMessage();
 	die("<br /><b>Application Terminated.</b>");
 }
-// echo "<b>Connected to Database in ";
-// echo NYA_INIT;
-// echo " mode!</b><br />";
+ // echo "<b>Connected to Database in ";
+ // echo NYA_INIT;
+ // echo " mode!</b><br />";
 ?>

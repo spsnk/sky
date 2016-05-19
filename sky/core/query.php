@@ -23,15 +23,21 @@ switch($nya){
           case 'T':
           	$area   = getGETPOST('area');
             try {
-              $sth = $DBH->prepare('INSERT INTO empleado (Nombre,ap,am,fechaContratacion,tipo) VALUES(?,?,?,?,?); SELECT LAST_INSERT_ID() as last');
+              $DBH->beginTransaction();
+              $sth = $DBH->prepare('INSERT INTO empleado (Nombre,ap,am,fechaContratacion,tipo) VALUES(?,?,?,?,?)');
+              // SELECT LAST_INSERT_ID() as last');
               $sth->execute($data);
-              $lastClientId = $sth->fetch();
-              $lastClientId = $lastClientId['last'];
+              //$lastClientId = $sth->fetch();
+              //$lastClientId = $lastClientId['last'];
+              $lastClientId = $DBH->lastInsertId();
               $sth = $DBH->prepare('INSERT INTO tecnico (idEmpleado,Area) VALUES(?,?)');
               $sth->execute(array($lastClientId,$area));
+              $DBH->commit();
             } catch(PDOException $e){
               echo $e->getMessage();
-              die("<br /><b>Application Terminated. $nya->$act</b>");
+              $DBH->rollBack();
+              print_r($data);
+              echo("<br /><b>Application Terminated, transaction rolled back. $nya->$act</b>");
             }
             echo "<br /><b>Sucessfully added Tecnician.</b> <script type='text/javascript'>var lastClient=$lastClientId;</script>";
           break;
@@ -40,14 +46,20 @@ switch($nya){
             $hours    = getGETPOST('hours');
             $pass     = getGETPOST('pass');
             try {
-              $sth = $DBH->prepare('INSERT INTO empleado (Nombre,ap,am,fechaContratacion,tipo) VALUES(?,?,?,?,?); SELECT LAST_INSERT_ID() as last');
+              $DBH->beginTransaction();
+              $sth = $DBH->prepare('INSERT INTO empleado (Nombre,ap,am,fechaContratacion,tipo) VALUES(?,?,?,?,?)');
+              // SELECT LAST_INSERT_ID() as last');
               $sth->execute($data);
-              $lastClientId = $sth->fetch();
-              $lastClientId = $lastClientId['last'];
-              $sth = $DBH->prepare('INSERT INTO tecnico (idEmpleado,Salario,Horas,password) VALUES(?,?)');
+              //$lastClientId = $sth->fetch();
+              //$lastClientId = $lastClientId['last'];
+              $lastClientId = $DBH->lastInsertId();
+              $sth = $DBH->prepare('INSERT INTO administrativo (idEmpleado,Salario,Horas,password) VALUES(?,?)');
               $sth->execute(array($lastClientId,$salary,$hours,$pass));
+              $DBH->commit();
             } catch(PDOException $e){
+              $DBH->rollBack();
               echo $e->getMessage();
+              print_r($data);
               die("<br /><b>Application Terminated. $nya->$act</b>");
             }
             echo "<br /><b>Sucessfully added Administrative.</b> <script type='text/javascript'>var lastClient=$lastClientId;</script>";
