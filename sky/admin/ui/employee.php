@@ -11,7 +11,7 @@ else
 ?>
 <script type="text/javascript">
 rawr();
-//$("#query").load("ui/<?php echo "$nya-$act.php"; ?>","nya=<? echo $nya; ?>&act=<? echo $act; ?>&id=<? echo $id; ?> &max_result=10");
+$("#query").load("ui/<?php echo "$nya-$act.php"; ?>","nya=<? echo $nya; ?>&act=<? echo $act; ?>&id=<? echo $id; ?>&max_result=10");
 </script>
 <h1>Empleados</h1>
 <div id="employee-nav">
@@ -19,13 +19,5 @@ rawr();
 	<a href="ui/employee-add.php" id="nya=employee&amp;" class="query">Agregar</a>
 	<!--<a  href="../core/query.php" class="query" id="nya=client&amp;act=modify">Modificar</a>
 	<a  href="../core/query.php" class="query" id="nya=client&amp;act=delete">Eliminar</a>-->
-</div>
-<div id="buscanav" style="float:left;margin-bottom:-1px;">
-	<div id="basic">
-		<input type="text" value="<?php if(isset($_GET['loli'])) echo $_GET['loli']; else echo "";?>" placeholder="Buscar" id="buscador" />
-		<input type="hidden" id="result" disabled="disabled"/>
-	</div>
-	<div id="adv">
-	</div>
 </div>
 <div id="query"></div>

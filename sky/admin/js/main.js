@@ -54,7 +54,7 @@ function rawr(){
 		var wut=$(this).attr("class");
 		//alert(href+":"+get+":"+wut);
 		$(this).removeAttr("href").click( function(){ 
-			//$("#status").html(ajax_load);
+			$("#status").html(ajax_load);
 			//if(wut=="ajax") {$('#'+wut).css("display","none");}
 			$("#"+wut).load(href,get,function(response, status, xhr){
 				//bindAjax($(this));

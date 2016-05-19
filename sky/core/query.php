@@ -104,9 +104,109 @@ switch($nya){
           break;
         }
       break;
-      
+      ////////////////////
       case 'view':
-      break;
+				if(getGETPOST('id')!='') {
+					try {
+						$data=array(getGETPOST('id'));
+						$sth = $DBH->prepare('SELECT * FROM empleado WHERE idEmpleado=?');
+						$sth->execute($data);
+					} catch(PDOException $e){
+						echo $e->getMessage();
+						die("<br /><b>Application Terminated. $nya->$act</b>");
+					}
+				} else {
+					if(getGETPOST('max_result')!="")
+						$limit = (int)getGETPOST('max_result');
+					else
+						$limit = 10;
+					if(getGETPOST('start')!="")
+						$start = (int)getGETPOST('start');
+					else
+						$start = 0;
+					//$data= array($start,$limit);
+					try {
+						$sth = $DBH->prepare('SELECT * FROM empleado LIMIT ?, ?');
+						$sth->bindValue(1, $start, PDO::PARAM_INT);
+						$sth->bindValue(2, $limit, PDO::PARAM_INT);
+						$sth->execute();
+						$countsth = $DBH->query('SELECT COUNT(*) AS total FROM empleado');
+					} catch(PDOException $e){
+						echo $e->getMessage();
+						die("<br /><b>Application Terminated. $nya->$act</b>");
+					}
+					$count = $countsth->fetch();
+					$count = $count['total'];
+				}
+				$result = stripslashes_deep($sth->fetchAll());
+			break;
+      //////////////
+			case 'search':
+				if(getGETPOST('term')!="") 
+					$autocomplete = getGETPOST('term');
+				else
+					die("No data received.");
+				$data = array("%".$autocomplete."%");
+				try {
+					$sth = $DBH->prepare('SELECT ID AS value, name AS label FROM client WHERE name LIKE ? LIMIT 15');
+					$sth->execute($data);
+				} catch(PDOException $e){
+					echo $e->getMessage();
+					die("<br /><b>Application Terminated. $nya->$act</b>");
+				}
+				$result = stripslashes_deep($sth->fetchAll());
+				// for($i=0;$i <= sizeof($result);$i++){
+					// echo $i." :";
+					// print_r($result[$i]);
+					// echo "<br />";
+				// }
+				// $encoded_results=array();
+				// for($i=0;$i < sizeof($result);$i++){
+					//echo $i.":".$result[$i]['ID']."=>".$result[$i]['name']."<br />";
+					// $encoded_results = $encoded_results + array($result[$i]['value']=>$result[$i]['label']);
+				// }
+				//print_r($encoded_results);
+				//echo "<br />";
+				die(json_encode($result));
+			break;
+			case 'update':
+				if(getGETPOST('id')!="" ) 
+					$id = getGETPOST('id'); 
+				else 
+					die("No valid ID specified.");
+				if(getGETPOST('name')!="") 
+					$name = getGETPOST('name'); 
+				if(getGETPOST('phone')!="" || strpos(getGETPOST('phone'),"_") !== false) 
+					$phone = getGETPOST('phone'); 
+				else 
+					$phone = NULL;
+				echo"</br>Data Received for update: <br />ID: $id <br />Name: $name <br />Address: $address <br />Phone: $phone <br /> ";
+				// if($address == "" || $address == "Dirección")
+					// $address = NULL;
+				// if($phone == "" || strpos($phone,"_") !== false )
+					// $phone = NULL;
+				$data = array($name,$address,$phone,$id);
+				try {
+					$sth = $DBH->prepare('UPDATE client SET Nombre=?,ap=?,am=?,Telefono=?,Calle=?,Colonia=?,CP=?,fechaNacimiento=?,password=? WHERE id=?');
+					$sth->execute($data);
+				} catch(PDOException $e){
+					echo $e->getMessage();
+					die("<br /><b>Application Terminated. $nya->$act</b>");
+				}
+				echo "<br /><b>Sucessfully updated client.</b>";
+			break;
+			case 'count':
+				try {
+					$sth = $DBH->query('SELECT COUNT(*) AS total FROM client');
+				} catch(PDOException $e){
+					echo $e->getMessage();
+					die("<br /><b>Application Terminated. $nya->$act</b>");
+				}
+				$result = $sth->fetch();
+				die($result['total']);
+			break;
+			default:
+				echo "No valid act received $nya-> \$act = '$act'"; break;
     }
   break;
 	case 'client':
