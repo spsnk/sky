@@ -18,8 +18,10 @@ switch($nya){
 				$am     = getGETPOST('am');
 				$hiredt	= getGETPOST('hiredt');
 				$type   = getGETPOST('type');
-        if ($_FILES["img"]["error"] > 0 && $_FILES["img"]["error"] != 4){
-					echo ("Error: " . $_FILES["img"]["error"] . "<br />");
+        if (!array_key_exists("img",$_FILES)||($_FILES["img"]["error"] > 0 && $_FILES["img"]["error"] != 4) ){
+					//echo ("Error: " . $_FILES["img"]["error"] . "<br />");
+          echo ("No file uploaded");
+          $filename = "noimage.png";
 				} else {
 					if( $_FILES["img"]["error"] == 4 ){
 						$filename = "noimage.png";
@@ -31,30 +33,31 @@ switch($nya){
 							&& ($_FILES["img"]["type"] != "image/png")){
                 echo("Invalid File");
                 $filename = "noimage.png";
+            } else {
+              echo "Upload: " . $_FILES["img"]["name"] . "<br />";
+              echo "Type: " . $_FILES["img"]["type"] . "<br />";
+              echo "Size: " . ($_FILES["img"]["size"] / 1024) . " Kb<br />";
+              echo "Temp file: " . $_FILES["img"]["tmp_name"]."<br />";
+              $hash = md5_file($_FILES["img"]["tmp_name"]);
+              //$file_basename = substr($filename, 0, strripos($filename, '.')); // strip extention
+              $file_ext = substr($_FILES["img"]["name"], strripos($_FILES["img"]["name"], '.'));
+              if (file_exists(APP_PATH."img/employee/" . $hash . $file_ext)){
+                echo ($_FILES["img"]["name"] . " already exists, entry will be duplicated. ");
+                $filename = $hash . $file_ext;
+              } else {
+                move_uploaded_file($_FILES["img"]["tmp_name"],
+                APP_PATH."img/employee/" . $hash . $file_ext);
+                $filename = $hash . $file_ext;
+                include_once 'image.class.php';
+                $thumb = new thumb_image;
+                $thumb->GenerateThumbFile(APP_PATH . 'img/employee/'. $filename, APP_PATH . 'img/employee/thumb/t_' . $filename);
+                echo "Stored in: " . APP_PATH . "img/employee/" . $filename;
+                echo "<br /> Thumb stored in: " . APP_PATH . "img/employee/thumb/t_" . $filename;
+                echo "<br /><img src='". WEB_PATH . "img/employee/thumb/t_" . $filename ."' /><br />";
+                echo "<br /><img src='". WEB_PATH . "img/employee/" . $filename ."' />";
               }
-						echo "Upload: " . $_FILES["img"]["name"] . "<br />";
-						echo "Type: " . $_FILES["img"]["type"] . "<br />";
-						echo "Size: " . ($_FILES["img"]["size"] / 1024) . " Kb<br />";
-						echo "Temp file: " . $_FILES["img"]["tmp_name"]."<br />";
-						$hash = md5_file($_FILES["img"]["tmp_name"]);
-						//$file_basename = substr($filename, 0, strripos($filename, '.')); // strip extention
-						$file_ext = substr($_FILES["img"]["name"], strripos($_FILES["img"]["name"], '.'));
-						if (file_exists(APP_PATH."img/employee/" . $hash . $file_ext)){
-							echo ($_FILES["img"]["name"] . " already exists, entry will be duplicated. ");
-							$filename = $hash . $file_ext;
-						} else {
-							move_uploaded_file($_FILES["img"]["tmp_name"],
-							APP_PATH."img/employee/" . $hash . $file_ext);
-							$filename = $hash . $file_ext;
-							include_once 'image.class.php';
-							$thumb = new thumb_image;
-							$thumb->GenerateThumbFile(APP_PATH . 'img/employee/'. $filename, APP_PATH . 'img/employee/thumb/t_' . $filename);
-							echo "Stored in: " . APP_PATH . "img/employee/" . $filename;
-							echo "<br /> Thumb stored in: " . APP_PATH . "img/employee/thumb/t_" . $filename;
-							echo "<br /><img src='". WEB_PATH . "img/employee/thumb/t_" . $filename ."' /><br />";
-							echo "<br /><img src='". WEB_PATH . "img/employee/" . $filename ."' />";
-						}
-					}
+            }
+          }
 				}
         $data = array($name,$ap,$am,$hiredt,$type,$filename);
         switch($type){
@@ -62,7 +65,7 @@ switch($nya){
           	$area   = getGETPOST('area');
             try {
               $DBH->beginTransaction();
-              $sth = $DBH->prepare('INSERT INTO empleado (Nombre,ap,am,fechaContratacion,tipo,foto) VALUES(?,?,?,?,?)');
+              $sth = $DBH->prepare('INSERT INTO empleado (Nombre,ap,am,fechaContratacion,tipo,foto) VALUES(?,?,?,?,?,?)');
               // SELECT LAST_INSERT_ID() as last');
               $sth->execute($data);
               //$lastClientId = $sth->fetch();
@@ -75,7 +78,7 @@ switch($nya){
               echo $e->getMessage();
               $DBH->rollBack();
               print_r($data);
-              echo("<br /><b>Application Terminated, transaction rolled back. $nya->$act</b>");
+              echo("<br /><b>Application Terminated, transaction rolled back. $nya->$act</b><script type='text/javascript'>var lastClient=0;</script>");
             }
             echo "<br /><b>Sucessfully added Tecnician.</b> <script type='text/javascript'>var lastClient=$lastClientId;</script>";
           break;
@@ -85,20 +88,17 @@ switch($nya){
             $pass     = getGETPOST('pass');
             try {
               $DBH->beginTransaction();
-              $sth = $DBH->prepare('INSERT INTO empleado (Nombre,ap,am,fechaContratacion,tipo) VALUES(?,?,?,?,?)');
-              // SELECT LAST_INSERT_ID() as last');
+              $sth = $DBH->prepare('INSERT INTO empleado (Nombre,ap,am,fechaContratacion,tipo,foto) VALUES(?,?,?,?,?,?)');
               $sth->execute($data);
-              //$lastClientId = $sth->fetch();
-              //$lastClientId = $lastClientId['last'];
               $lastClientId = $DBH->lastInsertId();
-              $sth = $DBH->prepare('INSERT INTO administrativo (idEmpleado,Salario,Horas,password) VALUES(?,?)');
+              $sth = $DBH->prepare('INSERT INTO administrativo (idEmpleado,Salario,Horas,password) VALUES(?,?,?,?)');
               $sth->execute(array($lastClientId,$salary,$hours,$pass));
               $DBH->commit();
             } catch(PDOException $e){
               $DBH->rollBack();
               echo $e->getMessage();
               print_r($data);
-              die("<br /><b>Application Terminated. $nya->$act</b>");
+              die("<br /><b>Application Terminated. $nya->$act</b><script type='text/javascript'>var lastClient=0;</script>");
             }
             echo "<br /><b>Sucessfully added Administrative.</b> <script type='text/javascript'>var lastClient=$lastClientId;</script>";
           break;
