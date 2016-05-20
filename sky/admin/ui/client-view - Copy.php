@@ -4,7 +4,7 @@ include '../../core/query.php';
 <script type="text/javascript">
 $(document).ready(function(){
 	rawr();
-	//clientView();
+	clientView();
 });
 </script>
 <div id="client-view-nav">
@@ -42,40 +42,27 @@ $(document).ready(function(){
 <div id="results">
 	<?php 
 	foreach($result as $key => $arr) { ?>
-	<div class="client display" id="<?php echo $arr['nocuenta']; ?>">
+	<div class="client-display" id="<?php echo $arr['ID']; ?>">
 		<p style="line-height:80%;">&nbsp;</p>
 		<form id="update<?php echo $key;?>" action="../core/query.php" method="post">
 			<input type="hidden" name="nya" value="client" />
 			<input type="hidden" name="act" value="update" />
-			<input type="hidden" name="id" value=<?php echo $arr['nocuenta']; ?> />
+			<input type="hidden" name="id" value=<?php echo $arr['ID']; ?> />
 			<a title="Nombre" id="name">
 				<div class="flechita"></div> 
-				<?php echo $arr['nombre']. " " . $arr['ap'] . " " . $arr['am']; ?>
+				<?php echo $arr['name']; ?>
 			</a>
-			<input type="text" name="name" value="<?echo htmlspecialchars($arr['nombre']);?>" class="hide" maxlength="40" id="name"/><br>
-			<a title="Calle" id="street">
+			<input type="text" name="name" value="<?echo htmlspecialchars($arr['name']);?>" class="hide" maxlength="40" id="name"/><br>
+			<!--<a title="Dirección" id="address">
 				<div class="flechita"></div> 
-				<?php if($arr['calle']!="") echo $arr['calle']; else for($i=0;$i<20;$i++) echo "&nbsp"; ?>
+				<?php if($arr['address']!="") echo $arr['address']; else for($i=0;$i<20;$i++) echo "&nbsp"; ?>
 			</a>
-			<input type="text" name="street" value="<? echo htmlspecialchars($arr['calle']); ?>" class="hide" maxlength="40" id="street" /><br>
-			<a title="Colonia" id="colony">
-				<div class="flechita"></div> 
-				<?php echo $arr['colonia'];?>
-			</a>
-			<input type="text" name="colony" value="<? echo htmlspecialchars($arr['colonia']); ?>" class="hide" maxlength="40" id="colony" /><br>
-			<a title="Codigo postal" id="cp">
-				<div class="flechita"></div> 
-				<?php echo $arr['cp'];?>
-			</a><br />
-			<a title="Fecha de nacimiento" id="bhda">
-				<div class="flechita"></div> 
-				<?php echo $arr['fechanacimiento'];?>
-			</a><br />
+			<input type="text" name="address" value="<? echo htmlspecialchars($arr['address']); ?>" class="hide" maxlength="40" id="address" /><br>-->
 			<a title="Teléfono" id="phone">
 				<div class="flechita"></div> 
-				<?php if($arr['telefono']!="") echo$arr['telefono']; else for($i=0;$i<20;$i++) echo "&nbsp"; ?>
+				<?php if($arr['phone']!="") echo$arr['phone']; else for($i=0;$i<20;$i++) echo "&nbsp"; ?>
 			</a>
-			<input type="text" name="phone" value="<?echo $arr['telefono']; ?>" class="hide" maxlength="18" id="phone" style="width: 120px;" />
+			<input type="text" name="phone" value="<?echo $arr['phone']; ?>" class="hide" maxlength="18" id="phone" style="width: 120px;" />
 			<input type="checkbox" id="cel" class="hide cel" title="¿Celular?" /><br>
 			<br>
 			<input type="submit" class="hide boton" value="Actualizar" id="submit"/> 

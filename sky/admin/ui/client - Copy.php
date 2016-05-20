@@ -11,7 +11,7 @@ else
 ?>
 <script type="text/javascript">
 rawr();
-$("#query").load("ui/<?php echo "$nya-$act.php"; ?>","nya=<? echo $nya; ?>&act=<? echo $act; ?>&max_result=12");
+$("#query").load("ui/<?php echo "$nya-$act.php"; ?>","nya=<? echo $nya; ?>&act=<? echo $act; ?>&max_result=20");
 //$('[alt=current]').click().removeAttr('alt');
 </script>
 <h1>Clientes</h1>

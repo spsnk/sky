@@ -136,6 +136,10 @@ include '../../core/query.php';
 				<?php echo $arr['am']; ?>
 			</a>
 			<input type="text" name="am" value="<?echo htmlspecialchars($arr['am']);?>" class="hide" maxlength="40" id="am"/><br />
+			<a title="Fecha de contratacion" id="hiredt">
+				<div class="flechita"></div> 
+				<?php echo $arr['fechacontratacion']; ?>
+			</a><br />
 			<a title="Puesto" id="type">
 				<div class="flechita"></div> 
 				<?php if($arr['tipo'] == 'T') echo "Técnico"; else echo "Administrativo"; ?>

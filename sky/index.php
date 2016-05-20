@@ -143,7 +143,7 @@
         <footer>
             <div class="row">
                 <div class="col-lg-12">
-                    <p>Copyright &copy; Bases de Datos 2016</p>
+                    <p>Copyright &copy; 2016 | <a href="admin">Administración</a></p>
                 </div>
             </div>
         </footer>

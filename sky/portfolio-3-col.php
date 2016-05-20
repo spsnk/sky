@@ -32,7 +32,7 @@
 
                         foreach ($Canal as $value) {
                            echo ' 
-                    <img src="BD Sky/fotos/'.$value["imagen"].'"class="img-responsive" style="width:200px; " >
+                    <img src="img/channel/'.$value["logo"].'"class="img-responsive" style="width:200px; " >
                      </a>
                 <h3>
                     <a href="portfolio-item.html">'.$value["Nombre"].'</a>

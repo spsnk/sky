@@ -48,7 +48,6 @@
                          <h2>Todos los canales</h2>
                 <table border="2">
                		<tr>
-               			<td align="center">idCanal</td>
                			<td align="center">Nombre Canal</td>
                			<td align="center">Descripción</td>
                			<td align="center">Logo</td>
@@ -62,10 +61,10 @@
               	<div id=cuenta>
 
                			<tr>
-               			<td align="center">'.$value["idCanal"].'</td>
+               			
                			<td align="center">'.$value["Nombre"].'</td>
                			<td align="center">'.$value["Descripcion"].'</td>
-               			<td align="center"><img src="BD Sky/fotos/'.$value["imagen"].'"class="img-responsive" style="width:100px;" ></td>
+               			<td align="center"><img src="img/channel/'.$value["logo"].'"class="img-responsive" style="width:100px;" ></td>
                		
                		</tr>
                       </div>

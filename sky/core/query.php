@@ -9,6 +9,7 @@ $result=NULL;
 $count=NULL;
 $types=NULL;
 $schools=NULL;
+$channels=NULL;
 switch($nya){
 	case 'employee':
     switch($act){
@@ -254,6 +255,155 @@ switch($nya){
       break;
     }
   break;
+  case 'service':
+    switch($act){
+      case 'view':
+				if(getGETPOST('id')!='') {
+					try {
+						$data=array(getGETPOST('id'));
+						$sth = $DBH->prepare('
+            SELECT * from servicio where idservicio = ?
+            ');
+						$sth->execute($data);
+					} catch(PDOException $e){
+						echo $e->getMessage();
+						die("<br /><b>Application Terminated. $nya->$act</b>");
+					}
+				} else {
+					if(getGETPOST('max_result')!="")
+						$limit = (int)getGETPOST('max_result');
+					else
+						$limit = 10;
+					if(getGETPOST('start')!="")
+						$start = (int)getGETPOST('start');
+					else
+						$start = 0;
+					try {
+						$sth = $DBH->prepare('
+            SELECT *
+            FROM servicio
+            LIMIT ?, ?
+            ');
+						$sth->bindValue(1, $start, PDO::PARAM_INT);
+						$sth->bindValue(2, $limit, PDO::PARAM_INT);
+						$sth->execute();
+						$countsth = $DBH->query('SELECT COUNT(*) AS total FROM servicio');
+					} catch(PDOException $e){
+						echo $e->getMessage();
+						die("<br /><b>Application Terminated. $nya->$act</b>");
+					}
+					$count = $countsth->fetch();
+					$count = $count['total'];
+				}
+				$result = stripslashes_deep($sth->fetchAll());
+      break;
+    }
+  break;
+  case 'package':
+			try {
+				$sth = $DBH->query('SELECT idcanal, nombre, logo FROM canal');
+			} catch(PDOException $e){
+				echo $e->getMessage();
+				die("<br/><b>Application Terminated. $nya->$act</b>");
+			}
+			$channels = stripslashes_deep($sth->fetchAll());
+      switch($act){
+        case 'view':
+          if(getGETPOST('id')!='') {
+            try {
+              $data=array(getGETPOST('id'));
+              $sth = $DBH->prepare('
+              SELECT * from paquete where idpaquete = ?
+              ');
+              $sth->execute($data);
+            } catch(PDOException $e){
+              echo $e->getMessage();
+              die("<br /><b>Application Terminated. $nya->$act</b>");
+            }
+          } else {
+            if(getGETPOST('max_result')!="")
+              $limit = (int)getGETPOST('max_result');
+            else
+              $limit = 10;
+            if(getGETPOST('start')!="")
+              $start = (int)getGETPOST('start');
+            else
+              $start = 0;
+            try {
+              $sth = $DBH->prepare('
+              SELECT *
+              FROM paquete
+              LIMIT ?, ?
+              ');
+              $sth->bindValue(1, $start, PDO::PARAM_INT);
+              $sth->bindValue(2, $limit, PDO::PARAM_INT);
+              $sth->execute();
+              $countsth = $DBH->query('SELECT COUNT(*) AS total FROM paquete');
+            } catch(PDOException $e){
+              echo $e->getMessage();
+              die("<br /><b>Application Terminated. $nya->$act</b>");
+            }
+            $count = $countsth->fetch();
+            $count = $count['total'];
+          }
+          $result = stripslashes_deep($sth->fetchAll());
+        break; 
+      }
+  break;
+  case 'equipment':
+			try {
+				$sth = $DBH->query('SELECT idproveedor, nombre FROM proveedor');
+			} catch(PDOException $e){
+				echo $e->getMessage();
+				die("<br/><b>Application Terminated. $nya->$act</b>");
+			}
+			$provider = stripslashes_deep($sth->fetchAll());
+      foreach($provider as $key => $arr){
+        $idprov[$arr['idproveedor']]=$arr['nombre'];
+      }
+      switch($act){
+        case 'view':
+          if(getGETPOST('id')!='') {
+            try {
+              $data=array(getGETPOST('id'));
+              $sth = $DBH->prepare('
+              SELECT * from equipo where idequipo = ?
+              ');
+              $sth->execute($data);
+            } catch(PDOException $e){
+              echo $e->getMessage();
+              die("<br /><b>Application Terminated. $nya->$act</b>");
+            }
+          } else {
+            if(getGETPOST('max_result')!="")
+              $limit = (int)getGETPOST('max_result');
+            else
+              $limit = 10;
+            if(getGETPOST('start')!="")
+              $start = (int)getGETPOST('start');
+            else
+              $start = 0;
+            try {
+              $sth = $DBH->prepare('
+              SELECT *
+              FROM equipo
+              LIMIT ?, ?
+              ');
+              $sth->bindValue(1, $start, PDO::PARAM_INT);
+              $sth->bindValue(2, $limit, PDO::PARAM_INT);
+              $sth->execute();
+              $countsth = $DBH->query('SELECT COUNT(*) AS total FROM equipo');
+            } catch(PDOException $e){
+              echo $e->getMessage();
+              die("<br /><b>Application Terminated. $nya->$act</b>");
+            }
+            $count = $countsth->fetch();
+            $count = $count['total'];
+          }
+          $result = stripslashes_deep($sth->fetchAll());
+        break; 
+      }
+  break;
 	case 'client':
 		switch($act){
 			case 'add':	
@@ -274,7 +424,7 @@ switch($nya){
 					$phone = NULL;
 				$data = array($name,$ap,$am,$phone,$street,$colony,$cp,$bhda,$pass);
 				try {
-					$sth = $DBH->prepare('INSERT INTO client (Nombre,ap,am,Telefono,Calle,Colonia,CP,fechaNacimiento,password) VALUES(?,?,?,?,?,?,?,?,?); SELECT LAST_INSERT_ID() as last');
+					$sth = $DBH->prepare('INSERT INTO cliente (Nombre,ap,am,Telefono,Calle,Colonia,CP,fechaNacimiento,password) VALUES(?,?,?,?,?,?,?,?,?); SELECT LAST_INSERT_ID() as last');
 					$sth->execute($data);
 					$lastClientId = $sth->fetch();
 					$lastClientId = $lastClientId['last'];
@@ -288,7 +438,7 @@ switch($nya){
 				if(getGETPOST('id')!="") {
 					try {
 						$data=array(getGETPOST('id'));
-						$sth = $DBH->prepare('SELECT * FROM client WHERE ID=?');
+						$sth = $DBH->prepare('SELECT * FROM cliente WHERE nocuenta=?');
 						$sth->execute($data);
 					} catch(PDOException $e){
 						echo $e->getMessage();
@@ -305,11 +455,11 @@ switch($nya){
 						$start = 0;
 					//$data= array($start,$limit);
 					try {
-						$sth = $DBH->prepare('SELECT * FROM client LIMIT ?, ?');
+						$sth = $DBH->prepare('SELECT * FROM cliente LIMIT ?, ?');
 						$sth->bindValue(1, $start, PDO::PARAM_INT);
 						$sth->bindValue(2, $limit, PDO::PARAM_INT);
 						$sth->execute();
-						$countsth = $DBH->query('SELECT COUNT(*) AS total FROM client');
+						$countsth = $DBH->query('SELECT COUNT(*) AS total FROM cliente');
 					} catch(PDOException $e){
 						echo $e->getMessage();
 						die("<br /><b>Application Terminated. $nya->$act</b>");
@@ -392,6 +542,7 @@ switch($nya){
 				echo "No valid act received $nya-> \$act = '$act'"; break;
 		}
 	break;
+  
 	case 'stock':
 		// if(isset($_GET['data']))
 			// $data = $_GET['data'];

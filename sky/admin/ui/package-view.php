@@ -3,7 +3,7 @@ include '../../core/query.php';
 ?>
 <script type="text/javascript">
   $('#buscador').autocomplete({
-		source: "../core/query.php?nya=service&act=search",
+		source: "../core/query.php?nya=package&act=search",
 		minLength: 2,
 		focus: function( event, ui ) {
 			$( "#buscador" ).val( ui.item.label );
@@ -13,7 +13,7 @@ include '../../core/query.php';
 		select: function( event, ui ) {
 			$( "#buscador" ).val( ui.item.label );
 			$( "#result" ).val( ui.item.value );
-			lolisearch($('#result'),$(this),"service");
+			lolisearch($('#result'),$(this),"package");
 			return false;
 		}
 	}).focus(function(){
@@ -47,7 +47,7 @@ include '../../core/query.php';
 			$(parentdiv+' input[type="checkbox"]').removeClass('hide');
 		}
 	});
-	$('div.service.display form').each(function(){
+	$('div.package.display form').each(function(){
 		//alert($(this).attr('id'));
 		$(this).validate({
 			submitHandler: function(form) {
@@ -57,7 +57,7 @@ include '../../core/query.php';
 					},
 					target: '#debug',
 					success:    function() { 
-						$('#query').load("ui/service-view.php","nya=service&act=view&id="+$(form).parent().attr("id"));
+						$('#query').load("ui/package-view.php","nya=package&act=view&id="+$(form).parent().attr("id"));
 					}
 				});
 			}
@@ -71,14 +71,18 @@ include '../../core/query.php';
 			}
 		});
 	});
+  
+  $('[type=checkbox]').change(function(){
+		$('[for='+$(this).attr("id")+']').toggleClass('active');
+	});
   $(document).ready(function(){
     rawr();
     setTimeout(function(){
-      $('.service .img').animate({opacity:1},900);
+      $('.package .img').animate({opacity:1},900);
     },50);
   });
     </script>
-<div id="service-view-nav">
+<div id="package-view-nav">
 	<input type="text" value="<?php if(isset($_GET['loli'])) echo $_GET['loli']; else echo "";?>" id="buscador" placeholder="Buscar" />
 	<input type="hidden" id="result" disabled="disabled"/>
 	<!--Total de clientes: <?php echo $count; ?>-->&nbsp;&nbsp;&nbsp;
@@ -89,7 +93,7 @@ include '../../core/query.php';
 		if(isset($_GET['max_result'])) $limite=$_GET['max_result']; 
 		else $limite=10;
 		if($cosita>1){ ?>
-			<a title='Página #<?php echo $cosita-1; ?>' href='ui/service-view.php?nya=service&amp;act=view&amp;start=<?php echo ($cosita-2)*$limite; ?>&amp;max_result=<?php echo $limite; ?>&amp;page=<?php echo $cosita-1; ?>' class='query'><</a>
+			<a title='Página #<?php echo $cosita-1; ?>' href='ui/package-view.php?nya=package&amp;act=view&amp;start=<?php echo ($cosita-2)*$limite; ?>&amp;max_result=<?php echo $limite; ?>&amp;page=<?php echo $cosita-1; ?>' class='query'><</a>
 		<?php } else { ?>
 			<a>&lt;</a>
 		<?php }
@@ -97,14 +101,14 @@ include '../../core/query.php';
 			$thingie = $cuenta==0 ? 0 : $cuenta*$limite;
 			if($cosita!=$loli) {
 				if($thingie<$count){ ?>
-					<a title='Página #<?php echo $loli;?>' href='ui/service-view.php?nya=service&amp;act=view&amp;start=<?php echo $thingie/* > 1 ? $thingie-1 : 0*/; ?>&amp;max_result=<?php echo $limite; ?>&amp;page=<?php echo $loli; ?>' class='query'><? echo $loli; ?></a>
+					<a title='Página #<?php echo $loli;?>' href='ui/package-view.php?nya=package&amp;act=view&amp;start=<?php echo $thingie/* > 1 ? $thingie-1 : 0*/; ?>&amp;max_result=<?php echo $limite; ?>&amp;page=<?php echo $loli; ?>' class='query'><? echo $loli; ?></a>
 				<?php } ?>
 			<?php } else { ?>
 				<a title='Página #<?echo $loli;?>' class='active'><?echo $loli;?></a>
 			<?php }
 		} ?>
 		<?php if($cosita*$limite<$count){ ?>
-			<a title='Página #<?php echo $cosita+1; ?>' href='ui/service-view.php?nya=service&amp;act=view&amp;start=<? echo $cosita*$limite; ?>&amp;max_result=<?php echo $limite; ?>&amp;page=<?php echo $cosita+1; ?>' class='query'>></a>
+			<a title='Página #<?php echo $cosita+1; ?>' href='ui/package-view.php?nya=package&amp;act=view&amp;start=<? echo $cosita*$limite; ?>&amp;max_result=<?php echo $limite; ?>&amp;page=<?php echo $cosita+1; ?>' class='query'>></a>
 		<?php } else { ?>
 			<a>&gt;</a>
 		<?php } ?>
@@ -113,29 +117,35 @@ include '../../core/query.php';
 <div id="results">
 	<?php 
 	foreach($result as $key => $arr) { ?>
-	<div class="service display" id="<?php echo $arr['idservicio']; ?>">
+	<div class="package display" id="<?php echo $arr['idpaquete']; ?>">
 		<p style="line-height:80%;">&nbsp;</p>
 		<form id="update<?php echo $key;?>" action="../core/query.php" method="post">
-			<input type="hidden" name="nya" value="service" />
+			<input type="hidden" name="nya" value="package" />
 			<input type="hidden" name="act" value="update" />
-			<input type="hidden" name="id" value=<?php echo $arr['idservicio']; ?> />
+			<input type="hidden" name="id" value=<?php echo $arr['idpaquete']; ?> />
 			<a title="Nombre" id="name">
 				<div class="flechita"></div> 
 				<?php echo $arr['nombre']; ?>
 			</a>
 			<input type="text" name="name" value="<?echo htmlspecialchars($arr['nombre']);?>" class="hide" maxlength="40" id="name"/><br />
+			<a title="Costo mensual" id="cost">
+				<div class="flechita"></div> 
+				$<?php echo $arr['renta']; ?>
+			</a>
+			<input type="text" name="cost" value="<?echo htmlspecialchars($arr['renta']);?>" class="hide" maxlength="40" id="cost"/><br />
 			<a title="Descripción" id="desc">
 				<div class="flechita"></div> 
 				<?php echo $arr['descripcion']; ?>
 			</a>
 			<input type="text" name="desc" value="<?echo htmlspecialchars($arr['descripcion']);?>" class="hide" maxlength="40" id="desc"/><br />
-			<a title="Costo" id="cost">
-				<div class="flechita"></div> 
-				$<?php echo $arr['costo']; ?>
-			</a>
-			<input type="text" name="am" value="<?echo htmlspecialchars($arr['costo']);?>" class="hide" maxlength="40" id="cost"/><br />
 			<input type="submit" class="hide boton" value="Actualizar" id="submit"/> 
 			<button type="button" class="hide boton">Cancelar</button>
+      <div class="multiple_select">
+				<? foreach($channels as $key => $arr){?>
+          <input type="checkbox" value="<?echo $arr['idcanal'];?>" name="channels[]" id="chn<?echo $key;?>" class="hide"/>
+          <label for="chn<?echo $key;?>"><?echo $arr['nombre'];?></label>
+        <?}?>
+			</div>
 		</form>
 	</div>
 	<? } ?><br>

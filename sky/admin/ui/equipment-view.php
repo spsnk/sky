@@ -3,7 +3,7 @@ include '../../core/query.php';
 ?>
 <script type="text/javascript">
   $('#buscador').autocomplete({
-		source: "../core/query.php?nya=service&act=search",
+		source: "../core/query.php?nya=equipment&act=search",
 		minLength: 2,
 		focus: function( event, ui ) {
 			$( "#buscador" ).val( ui.item.label );
@@ -13,7 +13,7 @@ include '../../core/query.php';
 		select: function( event, ui ) {
 			$( "#buscador" ).val( ui.item.label );
 			$( "#result" ).val( ui.item.value );
-			lolisearch($('#result'),$(this),"service");
+			lolisearch($('#result'),$(this),"equipment");
 			return false;
 		}
 	}).focus(function(){
@@ -47,7 +47,7 @@ include '../../core/query.php';
 			$(parentdiv+' input[type="checkbox"]').removeClass('hide');
 		}
 	});
-	$('div.service.display form').each(function(){
+	$('div.equipment.display form').each(function(){
 		//alert($(this).attr('id'));
 		$(this).validate({
 			submitHandler: function(form) {
@@ -57,7 +57,7 @@ include '../../core/query.php';
 					},
 					target: '#debug',
 					success:    function() { 
-						$('#query').load("ui/service-view.php","nya=service&act=view&id="+$(form).parent().attr("id"));
+						$('#query').load("ui/equipment-view.php","nya=equipment&act=view&id="+$(form).parent().attr("id"));
 					}
 				});
 			}
@@ -71,14 +71,15 @@ include '../../core/query.php';
 			}
 		});
 	});
+  
   $(document).ready(function(){
     rawr();
     setTimeout(function(){
-      $('.service .img').animate({opacity:1},900);
+      $('.equipment .img').animate({opacity:1},900);
     },50);
   });
     </script>
-<div id="service-view-nav">
+<div id="equipment-view-nav">
 	<input type="text" value="<?php if(isset($_GET['loli'])) echo $_GET['loli']; else echo "";?>" id="buscador" placeholder="Buscar" />
 	<input type="hidden" id="result" disabled="disabled"/>
 	<!--Total de clientes: <?php echo $count; ?>-->&nbsp;&nbsp;&nbsp;
@@ -89,7 +90,7 @@ include '../../core/query.php';
 		if(isset($_GET['max_result'])) $limite=$_GET['max_result']; 
 		else $limite=10;
 		if($cosita>1){ ?>
-			<a title='Página #<?php echo $cosita-1; ?>' href='ui/service-view.php?nya=service&amp;act=view&amp;start=<?php echo ($cosita-2)*$limite; ?>&amp;max_result=<?php echo $limite; ?>&amp;page=<?php echo $cosita-1; ?>' class='query'><</a>
+			<a title='Página #<?php echo $cosita-1; ?>' href='ui/equipment-view.php?nya=equipment&amp;act=view&amp;start=<?php echo ($cosita-2)*$limite; ?>&amp;max_result=<?php echo $limite; ?>&amp;page=<?php echo $cosita-1; ?>' class='query'><</a>
 		<?php } else { ?>
 			<a>&lt;</a>
 		<?php }
@@ -97,14 +98,14 @@ include '../../core/query.php';
 			$thingie = $cuenta==0 ? 0 : $cuenta*$limite;
 			if($cosita!=$loli) {
 				if($thingie<$count){ ?>
-					<a title='Página #<?php echo $loli;?>' href='ui/service-view.php?nya=service&amp;act=view&amp;start=<?php echo $thingie/* > 1 ? $thingie-1 : 0*/; ?>&amp;max_result=<?php echo $limite; ?>&amp;page=<?php echo $loli; ?>' class='query'><? echo $loli; ?></a>
+					<a title='Página #<?php echo $loli;?>' href='ui/equipment-view.php?nya=equipment&amp;act=view&amp;start=<?php echo $thingie/* > 1 ? $thingie-1 : 0*/; ?>&amp;max_result=<?php echo $limite; ?>&amp;page=<?php echo $loli; ?>' class='query'><? echo $loli; ?></a>
 				<?php } ?>
 			<?php } else { ?>
 				<a title='Página #<?echo $loli;?>' class='active'><?echo $loli;?></a>
 			<?php }
 		} ?>
 		<?php if($cosita*$limite<$count){ ?>
-			<a title='Página #<?php echo $cosita+1; ?>' href='ui/service-view.php?nya=service&amp;act=view&amp;start=<? echo $cosita*$limite; ?>&amp;max_result=<?php echo $limite; ?>&amp;page=<?php echo $cosita+1; ?>' class='query'>></a>
+			<a title='Página #<?php echo $cosita+1; ?>' href='ui/equipment-view.php?nya=equipment&amp;act=view&amp;start=<? echo $cosita*$limite; ?>&amp;max_result=<?php echo $limite; ?>&amp;page=<?php echo $cosita+1; ?>' class='query'>></a>
 		<?php } else { ?>
 			<a>&gt;</a>
 		<?php } ?>
@@ -113,27 +114,27 @@ include '../../core/query.php';
 <div id="results">
 	<?php 
 	foreach($result as $key => $arr) { ?>
-	<div class="service display" id="<?php echo $arr['idservicio']; ?>">
+	<div class="equipment display" id="<?php echo $arr['idservicio']; ?>">
 		<p style="line-height:80%;">&nbsp;</p>
 		<form id="update<?php echo $key;?>" action="../core/query.php" method="post">
-			<input type="hidden" name="nya" value="service" />
+			<input type="hidden" name="nya" value="equipment" />
 			<input type="hidden" name="act" value="update" />
-			<input type="hidden" name="id" value=<?php echo $arr['idservicio']; ?> />
-			<a title="Nombre" id="name">
+			<input type="hidden" name="id" value=<?php echo $arr['idequipo']; ?> />
+			<a title="idEquipo" id="id">
 				<div class="flechita"></div> 
-				<?php echo $arr['nombre']; ?>
+				Identificador: <?php echo $arr['idequipo']; ?>
 			</a>
-			<input type="text" name="name" value="<?echo htmlspecialchars($arr['nombre']);?>" class="hide" maxlength="40" id="name"/><br />
-			<a title="Descripción" id="desc">
+			<input type="text" name="id" value="<?echo htmlspecialchars($arr['idequipo']);?>" class="hide" maxlength="40" id="id"/><br />
+			<a title="Numero de tarjeta" id="card">
 				<div class="flechita"></div> 
-				<?php echo $arr['descripcion']; ?>
+				Tarjeta No.:<?php echo $arr['notarjeta']; ?>
 			</a>
-			<input type="text" name="desc" value="<?echo htmlspecialchars($arr['descripcion']);?>" class="hide" maxlength="40" id="desc"/><br />
-			<a title="Costo" id="cost">
+			<input type="text" name="card" value="<?echo htmlspecialchars($arr['notarjeta']);?>" class="hide" maxlength="40" id="card"/><br />
+			<a title="Proveedor" id="prov">
 				<div class="flechita"></div> 
-				$<?php echo $arr['costo']; ?>
+				Proveedor: <?php echo $idprov[$arr['idproveedor']]; ?>
 			</a>
-			<input type="text" name="am" value="<?echo htmlspecialchars($arr['costo']);?>" class="hide" maxlength="40" id="cost"/><br />
+			<input type="text" name="prov" value="<?echo htmlspecialchars($idprov[$arr['idproveedor']]);?>" class="hide" maxlength="40" id="prov"/><br />
 			<input type="submit" class="hide boton" value="Actualizar" id="submit"/> 
 			<button type="button" class="hide boton">Cancelar</button>
 		</form>
