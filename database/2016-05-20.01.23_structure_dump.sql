@@ -1,8 +1,8 @@
 -- MySQL dump 10.13  Distrib 5.5.45, for CYGWIN (x86_64)
 --
--- Host: sps.heliohost.org    Database: spsnk_sky
+-- Host: 127.0.0.1    Database: sky_final
 -- ------------------------------------------------------
--- Server version	5.6.21
+-- Server version	5.7.11-log
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -42,7 +42,8 @@ DROP TABLE IF EXISTS `canal`;
 CREATE TABLE `canal` (
   `idCanal` int(11) NOT NULL AUTO_INCREMENT,
   `Descripcion` varchar(45) DEFAULT NULL,
-  `Nombre` varchar(45) DEFAULT NULL,
+  `Nombre` varchar(45) NOT NULL DEFAULT 'Canal',
+  `logo` varchar(45) NOT NULL DEFAULT 'noimage.png',
   PRIMARY KEY (`idCanal`)
 ) ENGINE=InnoDB AUTO_INCREMENT=101 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -139,11 +140,12 @@ DROP TABLE IF EXISTS `empleado`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `empleado` (
   `idEmpleado` int(11) NOT NULL AUTO_INCREMENT,
-  `nombre` varchar(45) DEFAULT NULL,
-  `ap` varchar(45) DEFAULT NULL,
+  `nombre` varchar(45) NOT NULL,
+  `ap` varchar(45) NOT NULL,
   `am` varchar(45) DEFAULT NULL,
-  `fechaContratacion` date DEFAULT NULL,
-  `tipo` varchar(10) DEFAULT NULL,
+  `fechaContratacion` date NOT NULL,
+  `tipo` varchar(10) NOT NULL,
+  `foto` varchar(45) NOT NULL DEFAULT 'noimage.png',
   PRIMARY KEY (`idEmpleado`)
 ) ENGINE=InnoDB AUTO_INCREMENT=51 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -262,4 +264,4 @@ CREATE TABLE `tecnico` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-05-12 20:53:22
+-- Dump completed on 2016-05-20  1:23:34

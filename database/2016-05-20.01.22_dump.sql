@@ -1,8 +1,8 @@
 -- MySQL dump 10.13  Distrib 5.5.45, for CYGWIN (x86_64)
 --
--- Host: sps.heliohost.org    Database: spsnk_sky
+-- Host: 127.0.0.1    Database: sky_final
 -- ------------------------------------------------------
--- Server version	5.6.21
+-- Server version	5.7.11-log
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -52,7 +52,8 @@ DROP TABLE IF EXISTS `canal`;
 CREATE TABLE `canal` (
   `idCanal` int(11) NOT NULL AUTO_INCREMENT,
   `Descripcion` varchar(45) DEFAULT NULL,
-  `Nombre` varchar(45) DEFAULT NULL,
+  `Nombre` varchar(45) NOT NULL DEFAULT 'Canal',
+  `logo` varchar(45) NOT NULL DEFAULT 'noimage.png',
   PRIMARY KEY (`idCanal`)
 ) ENGINE=InnoDB AUTO_INCREMENT=101 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -63,7 +64,7 @@ CREATE TABLE `canal` (
 
 LOCK TABLES `canal` WRITE;
 /*!40000 ALTER TABLE `canal` DISABLE KEYS */;
-INSERT INTO `canal` VALUES (1,'Entretenimiento real','FOX'),(2,'Musica para tus oidos','Mosaico Música y Audio'),(3,'Solo lo mejor de Latinoamérica','MTV Latino'),(4,'Lo mejor de la música del momento','MTV Hits'),(5,'The best for Europe','VH1 Classic Europe'),(6,'Escucha lo mejor de Latinoamérica','VH1 Latino'),(7,'Para bailar un rato','Ritmoson Latino'),(8,'Solo la mejor musica en español','Telehit'),(9,'Lo mejor de las bandas!!','Bandamax'),(10,'Siempre a la vanguardia de la información','FOX News'),(11,'Mantente informado','CNN en Español'),(12,'News for you','CNN International'),(13,'Worldwide News!!','BBC World News'),(14,'Only important news','Management TV'),(15,'National Football League','NFL'),(16,'Canal de las Estrellas México','Canal 2'),(17,'Solo entretenimiento','Canal 5'),(18,'Informado todo el dia','Foro TV'),(19,'Diviertete en grande...','Azteca 7'),(20,'Peliculas para pasar el rato!!','Galavisión'),(21,'Canal del IPN','Once TV'),(22,'Un canal cerca de ti','Azteca 13'),(23,'Todo bajo el análisis de los expertos','Milenio TV'),(24,'El canal de CONACULTA','Canal 22'),(25,'Un nuevo concepto de TV','Proyecto 40'),(26,'El mejor del norte','Canal 34 de Monterrey TV'),(27,'El más destacado de Guadalajara','Canal 4 de Guadalajara TV'),(28,'La mejor señal de Tv abierta del Golfo','Canal 3 Puebla-Veracruz'),(29,'Canal del gobierno del Estado de México','Canal 34 Televisión Mexiquense'),(30,'La TV más interesante!!','Teleantillas'),(31,'La mejor TV del centro de América','TVN-2 Panama'),(32,'Máximo entretenimiento','TV MAX'),(33,'The best movies, series...','BBC Entertainment'),(34,'Solo la mejor diversión','Unicable'),(35,'Las mejores películas!!!','Warner Channel México'),(36,'Entretenimiento puro!!!','E! Entertainment'),(37,'Pura diversion y ocio','FX Latino'),(38,'Calidad y diversión','Universal Channel América Latina'),(39,'Buen entretenimiento para todos','A&E Mundo'),(40,'Encontraste el mejor!!!','AXN Latinoamérica'),(41,'Distracción y pasatiempo','Telemundo Internacional'),(42,'Cuidandote y entreteniéndote...','Discovery Home & Health'),(43,'Una nueva idea de ocio','Fox Life'),(44,'Una nueva forma perder el tiempo','Glitz'),(45,'No dejaras de reír!!','Distrito Comedia'),(46,'El mundo real llevado a tus ojos','Reality Tv'),(47,'Descubre la naturaleza y más','Animal Planet'),(48,'Descubre tu mundo...','Discovery Channel'),(49,'Conoce tu pasado...','History Channel'),(50,'Descubre tu planeta','National Geographic'),(51,'El canal de la UNAM','TV UNAM'),(52,'Conoce la vida de importantes personajes','Biography Channel'),(53,'La televisión del futuro','Marlavision'),(54,'Comunicados con el presente','Enlace TBN'),(55,'Entretenimiento mundial','TVE International'),(56,'Descubre el nuevo entretenimiento','Antena 3'),(57,'...Una nueva forma de entretenerte','Galicia TV'),(58,'Conoce tu planeta','TV Globo Internacional'),(59,'Descubre tu mente','TV 5 Monde Latina'),(60,'Entretenimiento con un nuevo enfoque','Deutsche Welle'),(61,'La mejor de Italia','RAI UNO Italia'),(62,'Japón en tu pantalla','NHK Japon World Premium'),(63,'La mejor para niños','Mosaico Kids'),(64,'A challenge for kids','Discovery Kids'),(65,'Entertainment for kids','Nickelodeon'),(66,'Funny and fool!!','Disney XD'),(67,'The best for kids','Cartoon Network'),(68,'Diviértete como niño','Tiin'),(69,'Disney at your TV','Disney Channel'),(70,'...Destroy your TV!!','Boomerang Mexico'),(71,'The first in your life','Baby Tv'),(72,'For little kids!!!','Nick Jr'),(73,'Childs at the BBC','CBeebies BBC'),(74,'Entertainment for your baby','Disney Junior'),(75,'Para tus tardes...','De Pelicula'),(76,'Golden at your TV','Golden'),(77,'The best of Golden','Golden Edge'),(78,'The unique Golden','Golden Multiplex'),(79,'Real, and unique entertainment','TNT'),(80,'Mejorando tu día','Film & Arts'),(81,'An entertainment area','Film Zone'),(82,'The best movies','Moviecity Premieres'),(83,'Movies at your home','City Family'),(84,'Lo mejor de la temporada','Cinecanal'),(85,'HBO at your home','HBO 2 Latinoamerica'),(86,'Las mejores producciones para ti','HBO Plus'),(87,'Together... in family','HBO Family'),(88,'Premieres, cine... y diversión','Max Prime'),(89,'Disfruta del futbol','Planeta Futbol 1'),(90,'Lo mejor de los deportes','TDN'),(91,'Los deportes en otro enfoque','ESPN International'),(92,'TV con lo mejor del deporte','FOX Sports'),(93,'La fórmula 1 a tu alcance','Speed Latinoamerica'),(94,'Solo para los expertos','Golf Channel'),(95,'Lo mejor del basketball en tu TV','NBA'),(96,'Un mejor analisis de los deportes','ESPN 2'),(97,'Una TV con mas deporte','FOX Sports +'),(98,'Lo mejor seleccion del basketball','NBA Pass1'),(99,'El deporte es oficial','MLB'),(100,'Tu noticiario oficial','Mosaico Noticias');
+INSERT INTO `canal` VALUES (1,'Entretenimiento real','FOX','fox.jpg'),(2,'Musica para tus oidos','Mosaico Música y Audio','mosaico.jpg'),(3,'Solo lo mejor de Latinoamérica','MTV Latino','mtvlatino.jpg'),(4,'Lo mejor de la música del momento','MTV Hits','mtv.jpg'),(5,'The best for Europe','VH1 Classic Europe','classic.jpg'),(6,'Escucha lo mejor de Latinoamérica','VH1 Latino','vh1.png'),(7,'Para bailar un rato','Ritmoson Latino','ritmoson.jpe'),(8,'Solo la mejor musica en español','Telehit','telehit.png'),(9,'Lo mejor de las bandas!!','Bandamax','bandama.png'),(10,'Siempre a la vanguardia de la información','FOX News','foxnews.png'),(11,'Mantente informado','CNN en Español','cnnespa.jpg'),(12,'News for you','CNN International','cnnint.png'),(13,'Worldwide News!!','BBC World News','bbc.gif'),(14,'Only important news','Management TV','manag.jpe'),(15,'National Football League','NFL','nfl.png'),(16,'Canal de las Estrellas México','Canal 2','ca2.jpg'),(17,'Solo entretenimiento','Canal 5','ca5.png'),(18,'Informado todo el dia','Foro TV','foro.jpg'),(19,'Diviertete en grande...','Azteca 7','can7.png'),(20,'Peliculas para pasar el rato!!','Galavisión','gala.gif'),(21,'Canal del IPN','Once TV','canalonce.png'),(22,'Un canal cerca de ti','Azteca 13','azt13.png'),(23,'Todo bajo el análisis de los expertos','Milenio TV','milenio.png'),(24,'El canal de CONACULTA','Canal 22','can22.png'),(25,'Un nuevo concepto de TV','Proyecto 40','can40.png'),(26,'El mejor del norte','Canal 34 de Monterrey TV','can34.png'),(27,'El más destacado de Guadalajara','Canal 4 de Guadalajara TV','can4.jpg'),(28,'La mejor señal de Tv abierta del Golfo','Canal 3 Puebla-Veracruz','can3.png'),(29,'Canal del gobierno del Estado de México','Canal 34 Televisión Mexiquense','can34me.jpg'),(30,'La TV más interesante!!','Teleantillas','telea.png'),(31,'La mejor TV del centro de América','TVN-2 Panama','tvn.jpe'),(32,'Máximo entretenimiento','TV MAX','tvmax.png'),(33,'The best movies, series...','BBC Entertainment','BBCEnt.png'),(34,'Solo la mejor diversión','Unicable','unicable.gif'),(35,'Las mejores películas!!!','Warner Channel México','warner.png'),(36,'Entretenimiento puro!!!','E! Entertainment','e!.png'),(37,'Pura diversion y ocio','FX Latino','fx.png'),(38,'Calidad y diversión','Universal Channel América Latina','universal.png'),(39,'Buen entretenimiento para todos','A&E Mundo','ae.png'),(40,'Encontraste el mejor!!!','AXN Latinoamérica','axn.jpg'),(41,'Distracción y pasatiempo','Telemundo Internacional','telemundo.jpg'),(42,'Cuidandote y entreteniéndote...','Discovery Home & Health','home.png'),(43,'Una nueva idea de ocio','Fox Life','foxlife.png'),(44,'Una nueva forma perder el tiempo','Glitz','glitz.png'),(45,'No dejaras de reír!!','Distrito Comedia','distritoc.png'),(46,'El mundo real llevado a tus ojos','Reality Tv','reality.png'),(47,'Descubre la naturaleza y más','Animal Planet','animal.png'),(48,'Descubre tu mundo...','Discovery Channel','discovery.png'),(49,'Conoce tu pasado...','History Channel','histoey.jpe'),(50,'Descubre tu planeta','National Geographic','national.jpg'),(51,'El canal de la UNAM','TV UNAM','tvunam.jpg'),(52,'Conoce la vida de importantes personajes','Biography Channel','bio.png'),(53,'La televisión del futuro','Marlavision','maria.jpg'),(54,'Comunicados con el presente','Enlace TBN','enlace.jpe'),(55,'Entretenimiento mundial','TVE International','tve.jpe'),(56,'Descubre el nuevo entretenimiento','Antena 3','antena.gif'),(57,'...Una nueva forma de entretenerte','Galicia TV','galicia.png'),(58,'Conoce tu planeta','TV Globo Internacional','tv globo.jpg'),(59,'Descubre tu mente','TV 5 Monde Latina','tv5.jpe'),(60,'Entretenimiento con un nuevo enfoque','Deutsche Welle','dw.gif'),(61,'La mejor de Italia','RAI UNO Italia','rai.jpg'),(62,'Japón en tu pantalla','NHK Japon World Premium','nhk.jpe'),(63,'La mejor para niños','Mosaico Kids','kids.jpe'),(64,'A challenge for kids','Discovery Kids','diskids.png'),(65,'Entertainment for kids','Nickelodeon','nick.jpg'),(66,'Funny and fool!!','Disney XD','disney.png'),(67,'The best for kids','Cartoon Network','cn4.png'),(68,'Diviértete como niño','Tiin','tinn.png'),(69,'Disney at your TV','Disney Channel','disneycha.png'),(70,'...Destroy your TV!!','Boomerang Mexico','boomerang.jpg'),(71,'The first in your life','Baby Tv','baby.png'),(72,'For little kids!!!','Nick Jr','nickjr.jpe'),(73,'Childs at the BBC','CBeebies BBC','bbcbaby.jpe'),(74,'Entertainment for your baby','Disney Junior','disneyjr.png'),(75,'Para tus tardes...','De Pelicula','dp.jpg'),(76,'Golden at your TV','Golden','golden.jpg'),(77,'The best of Golden','Golden Edge','goldened.png'),(78,'The unique Golden','Golden Multiplex','goldenmul.png'),(79,'Real, and unique entertainment','TNT','tnt.png'),(80,'Mejorando tu día','Film & Arts','film.png'),(81,'An entertainment area','Film Zone','filmzone.jpe'),(82,'The best movies','Moviecity Premieres','moviecity.png'),(83,'Movies at your home','City Family','cityfam.png'),(84,'Lo mejor de la temporada','Cinecanal','cinecanal.png'),(85,'HBO at your home','HBO 2 Latinoamerica','hbo.png'),(86,'Las mejores producciones para ti','HBO Plus','HBOPLUS.png'),(87,'Together... in family','HBO Family','HBOFamily.png'),(88,'Premieres, cine... y diversión','Max Prime','maxprime.gif'),(89,'Disfruta del futbol','Planeta Futbol 1','planeta.jpe'),(90,'Lo mejor de los deportes','TDN','tdn.jpe'),(91,'Los deportes en otro enfoque','ESPN International','espn.png'),(92,'TV con lo mejor del deporte','FOX Sports','foxes.jpe'),(93,'La fórmula 1 a tu alcance','Speed Latinoamerica','speed.png'),(94,'Solo para los expertos','Golf Channel','golf.png'),(95,'Lo mejor del basketball en tu TV','NBA','nba.png'),(96,'Un mejor analisis de los deportes','ESPN 2','espn2.jpg'),(97,'Una TV con mas deporte','FOX Sports +','foxsports.jpe'),(98,'Lo mejor seleccion del basketball','NBA Pass1','nbapass.jpe'),(99,'El deporte es oficial','MLB','mlb.png'),(100,'Tu noticiario oficial','Mosaico Noticias','noticias.jpe');
 /*!40000 ALTER TABLE `canal` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -199,11 +200,12 @@ DROP TABLE IF EXISTS `empleado`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `empleado` (
   `idEmpleado` int(11) NOT NULL AUTO_INCREMENT,
-  `nombre` varchar(45) DEFAULT NULL,
-  `ap` varchar(45) DEFAULT NULL,
+  `nombre` varchar(45) NOT NULL,
+  `ap` varchar(45) NOT NULL,
   `am` varchar(45) DEFAULT NULL,
-  `fechaContratacion` date DEFAULT NULL,
-  `tipo` varchar(10) DEFAULT NULL,
+  `fechaContratacion` date NOT NULL,
+  `tipo` varchar(10) NOT NULL,
+  `foto` varchar(45) NOT NULL DEFAULT 'noimage.png',
   PRIMARY KEY (`idEmpleado`)
 ) ENGINE=InnoDB AUTO_INCREMENT=51 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -214,7 +216,7 @@ CREATE TABLE `empleado` (
 
 LOCK TABLES `empleado` WRITE;
 /*!40000 ALTER TABLE `empleado` DISABLE KEYS */;
-INSERT INTO `empleado` VALUES (1,'Rogelio','Contreras','Salazar','2014-01-23','T'),(2,'Julio Cesar','Paredes','Carmona','2014-07-11','T'),(3,'Darío','Gómez','Hernández','2014-08-05','T'),(4,'Guillermo','Álvarez','Torres','2016-03-14','T'),(5,'Kevin Josué','Romero','Ayala','2015-07-23','T'),(6,'Carolina','Gutiérrez','Mora','2015-09-01','T'),(7,'Marco Antonio','Rodríguez','Molina','2015-10-09','T'),(8,'Pedro','Arellano','Zaragoza','2014-12-10','T'),(9,'Jorge','Carmona','Arzate','2016-05-09','T'),(10,'Luis Armando','Torres','Rico','2014-11-25','T'),(11,'Gudalupe','Estrada','Jimenez','2015-06-03','T'),(12,'Rogelio','Mora','Domínguez','2015-09-28','T'),(13,'Hugo','Serrano','Paredes','2014-04-01','T'),(14,'Julián Alfaro','Juaréz','Cisneros','2016-02-10','T'),(15,'Iván','Díaz','Delgado','2014-07-22','T'),(16,'Johan','Pelaez','Uribe','2014-05-29','T'),(17,'Bryan','García','Bonilla','2015-03-18','T'),(18,'Teodolfo Uriel','Carrillo','Sánchez','2015-07-31','T'),(19,'Christian Yamil','Orozco','Villar','2016-04-04','T'),(20,'Javier','Morales','Martínez','2014-12-05','T'),(21,'Flavio Cesár','Tellez','Rubio','2015-08-22','T'),(22,'Carlos','Beltrán','Rojas','2014-01-14','T'),(23,'Armando','Jimenez','Vera','2016-04-25','T'),(24,'Rogelio Uriel','Romero','Sánchez','2015-11-19','T'),(25,'José Luis','Beltrán','Echeverría','2015-09-21','T'),(26,'Andrés','Lopéz','Contreras','2015-02-20','T'),(27,'Ramón','Arzate','Salazar','2015-12-15','T'),(28,'Eduardo','Costa','Sánchez','2015-01-09','T'),(29,'Alan','Pascual','Ruiz','2014-07-02','T'),(30,'Israel','Gómez','Gutiérrez','2016-04-08','T'),(31,'José Ignacio','Duarte','Iglesias','2014-10-28','T'),(32,'Oscar','Barrientos','Suárez','2014-12-01','T'),(33,'Julián','Cisneros','Carmona','2014-01-17','T'),(34,'Francisco','Rojas','Tovias','2015-02-11','T'),(35,'Cesár','Álvarez','Torres','2015-05-11','T'),(36,'Alfredo','Domínguez','García','2015-07-06','T'),(37,'Carlos','Molina','Gallego','2016-02-15','T'),(38,'Javier','Barranco','Díaz','2016-04-01','T'),(39,'Fernando','Velez','Pérez','2015-06-24','T'),(40,'Raúl','Castañon','Díaz','2015-10-08','T'),(41,'Cynthia Aylin','Serna','Vázquez','2014-09-02','A'),(42,'Carmen','Rojas','Rodríguez','2015-03-09','A'),(43,'Julieta','Ruiz','Estrada','2014-01-10','A'),(44,'Helena','Romero','Villaseñor','2014-01-08','A'),(45,'Johanna','Rodríguez','Castro','2015-06-03','A'),(46,'Jennifer','Salas','Veloz','2014-08-14','A'),(47,'Katia','Uribe','Gómez','2014-08-29','A'),(48,'Genaro','Roman','Lopéz','2015-02-06','A'),(49,'Lydia','Muñoz','Duarte','2015-12-07','A'),(50,'Marisol','Díaz','Juaréz','2014-06-06','A');
+INSERT INTO `empleado` VALUES (1,'Rogelio','Contreras','Salazar','2014-01-23','T','1.png'),(2,'Julio Cesar','Paredes','Carmona','2014-07-11','T','2.png'),(3,'Darío','Gómez','Hernández','2014-08-05','T','3.png'),(4,'Guillermo','álvarez','Torres','2016-03-14','T','4.png'),(5,'Kevin Josué','Romero','Ayala','2015-07-23','T','5.png'),(6,'Carolina','Gutiérrez','Mora','2015-09-01','T','6.png'),(7,'Marco Antonio','Rodríguez','Molina','2015-10-09','T','7.png'),(8,'Pedro','Arellano','Zaragoza','2014-12-10','T','8.png'),(9,'Jorge','Carmona','Arzate','2016-05-09','T','9.png'),(10,'Luis Armando','Torres','Rico','2014-11-25','T','10.png'),(11,'Gudalupe','Estrada','Jimenez','2015-06-03','T','11.png'),(12,'Rogelio','Mora','Domínguez','2015-09-28','T','12.png'),(13,'Hugo','Serrano','Paredes','2014-04-01','T','13.png'),(14,'Julián Alfaro','Juaréz','Cisneros','2016-02-10','T','14.png'),(15,'Iván','Díaz','Delgado','2014-07-22','T','15.png'),(16,'Johan','Pelaez','Uribe','2014-05-29','T','16.png'),(17,'Bryan','García','Bonilla','2015-03-18','T','17.png'),(18,'Teodolfo Uriel','Carrillo','Sánchez','2015-07-31','T','18.png'),(19,'Christian Yamil','Orozco','Villar','2016-04-04','T','19.png'),(20,'Javier','Morales','Martínez','2014-12-05','T','20.png'),(21,'Flavio Cesár','Tellez','Rubio','2015-08-22','T','21.png'),(22,'Carlos','Beltrán','Rojas','2014-01-14','T','22.png'),(23,'Armando','Jimenez','Vera','2016-04-25','T','23.png'),(24,'Rogelio Uriel','Romero','Sánchez','2015-11-19','T','24.png'),(25,'José Luis','Beltrán','Echeverría','2015-09-21','T','25.png'),(26,'Andrés','Lopéz','Contreras','2015-02-20','T','26.png'),(27,'Ramón','Arzate','Salazar','2015-12-15','T','27.png'),(28,'Eduardo','Costa','Sánchez','2015-01-09','T','28.png'),(29,'Alan','Pascual','Ruiz','2014-07-02','T','29.png'),(30,'Israel','Gómez','Gutiérrez','2016-04-08','T','30.png'),(31,'José Ignacio','Duarte','Iglesias','2014-10-28','T','31.png'),(32,'Oscar','Barrientos','Suárez','2014-12-01','T','32.png'),(33,'Julián','Cisneros','Carmona','2014-01-17','T','33.png'),(34,'Francisco','Rojas','Tovias','2015-02-11','T','34.png'),(35,'Cesár','álvarez','Torres','2015-05-11','T','35.png'),(36,'Alfredo','Domínguez','García','2015-07-06','T','36.png'),(37,'Carlos','Molina','Gallego','2016-02-15','T','37.png'),(38,'Javier','Barranco','Díaz','2016-04-01','T','38.png'),(39,'Fernando','Velez','Pérez','2015-06-24','T','39.png'),(40,'Raúl','Castañon','Díaz','2015-10-08','T','40.png'),(41,'Cynthia Aylin','Serna','Vázquez','2014-09-02','A','41.png'),(42,'Carmen','Rojas','Rodríguez','2015-03-09','A','42.png'),(43,'Julieta','Ruiz','Estrada','2014-01-10','A','43.png'),(44,'Helena','Romero','Villaseñor','2014-01-08','A','44.png'),(45,'Johanna','Rodríguez','Castro','2015-06-03','A','45.png'),(46,'Jennifer','Salas','Veloz','2014-08-14','A','46.png'),(47,'Katia','Uribe','Gómez','2014-08-29','A','47.png'),(48,'Genaro','Roman','Lopéz','2015-02-06','A','48.png'),(49,'Lydia','Muñoz','Duarte','2015-12-07','A','49.png'),(50,'Marisol','Díaz','Juaréz','2014-06-06','A','50.png');
 /*!40000 ALTER TABLE `empleado` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -382,218 +384,6 @@ LOCK TABLES `tecnico` WRITE;
 INSERT INTO `tecnico` VALUES (1,'Norte'),(2,'Norte'),(3,'Norte'),(4,'Norte'),(5,'Norte'),(6,'Norte'),(7,'Norte'),(8,'Norte'),(9,'Norte'),(10,'Norte'),(11,'Sur'),(12,'Sur'),(13,'Sur'),(14,'Sur'),(15,'Sur'),(16,'Sur'),(17,'Sur'),(18,'Sur'),(19,'Sur'),(20,'Sur'),(21,'Este'),(22,'Este'),(23,'Este'),(24,'Este'),(25,'Este'),(26,'Este'),(27,'Este'),(28,'Este'),(29,'Este'),(30,'Este'),(31,'Oeste'),(32,'Oeste'),(33,'Oeste'),(34,'Oeste'),(35,'Oeste'),(36,'Oeste'),(37,'Oeste'),(38,'Oeste'),(39,'Oeste'),(40,'Oeste');
 /*!40000 ALTER TABLE `tecnico` ENABLE KEYS */;
 UNLOCK TABLES;
-
---
--- Dumping routines for database 'spsnk_sky'
---
-/*!50003 DROP PROCEDURE IF EXISTS `insert_admin` */;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8 */ ;
-/*!50003 SET character_set_results = utf8 */ ;
-/*!50003 SET collation_connection  = utf8_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;
-DELIMITER ;;
-CREATE DEFINER=`spsnk_sps`@`%` PROCEDURE `insert_admin`(IN num int,IN st int)
-BEGIN
-DECLARE cnt INT DEFAULT 0;
-set foreign_key_checks=0;
-WHILE cnt < num DO
-    insert into administrativo values (
-st+cnt,
-truncate(1500+rand()*15000,2),
-FLOOR( 1 + RAND( ) *8 ),
-"pass"
-);
-    SET cnt = cnt + 1;
-END WHILE;
-set foreign_key_checks=1;
-END ;;
-DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
-/*!50003 DROP PROCEDURE IF EXISTS `insert_canpaq` */;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8 */ ;
-/*!50003 SET character_set_results = utf8 */ ;
-/*!50003 SET collation_connection  = utf8_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;
-DELIMITER ;;
-CREATE DEFINER=`spsnk_sps`@`%` PROCEDURE `insert_canpaq`(IN num int)
-BEGIN
-DECLARE cnt INT DEFAULT 0;
-DECLARE exi INT DEFAULT 0;
-DECLARE idp INT DEFAULT 0;
-DECLARE idc INT DEFAULT 0;
-set foreign_key_checks=0;
-WHILE cnt < num DO
-set idp = FLOOR( 1 + RAND( ) *10 );
-set idc = FLOOR( 1 + RAND( ) *100 );
-set exi = (select count(*) from canalpaquete where idpaquete=idp and idcanal = idc );
-if exi = 0 then
-   insert into canalpaquete values (idp,idc);
-    SET cnt = cnt + 1;
-end if;
-END WHILE;
-set foreign_key_checks=1;
-END ;;
-DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
-/*!50003 DROP PROCEDURE IF EXISTS `insert_dopaquete` */;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8 */ ;
-/*!50003 SET character_set_results = utf8 */ ;
-/*!50003 SET collation_connection  = utf8_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;
-DELIMITER ;;
-CREATE DEFINER=`spsnk_sps`@`%` PROCEDURE `insert_dopaquete`(IN num int,in st int)
-BEGIN
-DECLARE cnt INT DEFAULT 0;
-set foreign_key_checks=0;
-WHILE cnt < num DO
-    insert into dopaquete values (
-FLOOR( 1 + RAND( ) *50 ),
-FLOOR( 1 + RAND( ) *10 ),
-st+cnt,
-(SELECT NOW() - INTERVAL FLOOR(RAND() * 60) DAY),
-NULL
-);
-    SET cnt = cnt + 1;
-END WHILE;
-set foreign_key_checks=1;
-END ;;
-DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
-/*!50003 DROP PROCEDURE IF EXISTS `insert_doservicio` */;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8 */ ;
-/*!50003 SET character_set_results = utf8 */ ;
-/*!50003 SET collation_connection  = utf8_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;
-DELIMITER ;;
-CREATE DEFINER=`spsnk_sps`@`%` PROCEDURE `insert_doservicio`(IN num int)
-BEGIN
-DECLARE cnt INT DEFAULT 0;
-set foreign_key_checks=0;
-WHILE cnt < num DO
-    insert into doservicio values (
-    (FLOOR( 1 + RAND( ) *10 )),
-    (FLOOR( 1 + RAND( ) *50 )),
-    (FLOOR( 1 + RAND( ) *40 )),
-    (SELECT NOW() - INTERVAL FLOOR(RAND() * 365) DAY));
-    SET cnt = cnt + 1;
-END WHILE;
-set foreign_key_checks=1;
-END ;;
-DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
-/*!50003 DROP PROCEDURE IF EXISTS `insert_equipo` */;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8 */ ;
-/*!50003 SET character_set_results = utf8 */ ;
-/*!50003 SET collation_connection  = utf8_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;
-DELIMITER ;;
-CREATE DEFINER=`spsnk_sps`@`%` PROCEDURE `insert_equipo`(IN num int,IN provnum int)
-BEGIN
-DECLARE cnt INT DEFAULT 0;
-set foreign_key_checks=0;
-WHILE cnt < num DO
-    insert into equipo values (NULL,(FLOOR( 100000 + RAND()*900000)),(FLOOR( 1 + RAND() * provnum )) );
-    SET cnt = cnt + 1;
-END WHILE;
-set foreign_key_checks=1;
-END ;;
-DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
-/*!50003 DROP PROCEDURE IF EXISTS `insert_pago` */;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8 */ ;
-/*!50003 SET character_set_results = utf8 */ ;
-/*!50003 SET collation_connection  = utf8_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;
-DELIMITER ;;
-CREATE DEFINER=`spsnk_sps`@`%` PROCEDURE `insert_pago`(IN concept varchar(45), IN tipo int, IN num int)
-BEGIN
-DECLARE cont INT DEFAULT 0;
-DECLARE ide INT DEFAULT NULL;
-DECLARE idc INT DEFAULT NULL;
-DECLARE idp INT DEFAULT NULL;
-set foreign_key_checks = 0;
-WHILE cont < num DO
-if tipo = 1 then set ide = (FLOOR( 1 + RAND( ) *50 ));
-elseif tipo = 2 then set idc = (FLOOR( 1 + RAND( ) *50 ));
-elseif tipo = 3 then set idp = (FLOOR( 1 + RAND( ) *10 ));
-end if;
-    insert into pago values (NULL, truncate(rand()*1000,2), concept ,(SELECT TIMESTAMP(NOW())-INTERVAL FLOOR(RAND()*720) Hour),ide,idc,idp);
-    SET cont = cont + 1;
-END WHILE;
-set foreign_key_checks = 1;
-END ;;
-DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
-/*!50003 DROP PROCEDURE IF EXISTS `insert_tecnico` */;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8 */ ;
-/*!50003 SET character_set_results = utf8 */ ;
-/*!50003 SET collation_connection  = utf8_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;
-DELIMITER ;;
-CREATE DEFINER=`spsnk_sps`@`%` PROCEDURE `insert_tecnico`(IN num int,IN area varchar(45),IN st int)
-BEGIN
-DECLARE cnt INT DEFAULT 0;
-set foreign_key_checks=0;
-WHILE cnt < num DO
-    insert into tecnico values (
-st+cnt,
-area
-);
-    SET cnt = cnt + 1;
-END WHILE;
-set foreign_key_checks=1;
-END ;;
-DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -604,4 +394,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-05-12 20:52:20
+-- Dump completed on 2016-05-20  1:22:57
