@@ -3,7 +3,7 @@ include '../../core/query.php';
 ?>
 <script type="text/javascript">
   $('#buscador').autocomplete({
-		source: "../core/query.php?nya=employee&act=search",
+		source: "../core/query.php?nya=service&act=search",
 		minLength: 2,
 		focus: function( event, ui ) {
 			$( "#buscador" ).val( ui.item.label );
@@ -13,7 +13,7 @@ include '../../core/query.php';
 		select: function( event, ui ) {
 			$( "#buscador" ).val( ui.item.label );
 			$( "#result" ).val( ui.item.value );
-			lolisearch($('#result'),$(this),"employee");
+			lolisearch($('#result'),$(this),"service");
 			return false;
 		}
 	}).focus(function(){
@@ -47,7 +47,7 @@ include '../../core/query.php';
 			$(parentdiv+' input[type="checkbox"]').removeClass('hide');
 		}
 	});
-	$('div.employee.display form').each(function(){
+	$('div.service.display form').each(function(){
 		//alert($(this).attr('id'));
 		$(this).validate({
 			submitHandler: function(form) {
@@ -57,7 +57,7 @@ include '../../core/query.php';
 					},
 					target: '#debug',
 					success:    function() { 
-						$('#query').load("ui/employee-view.php","nya=employee&act=view&id="+$(form).parent().attr("id"));
+						$('#query').load("ui/service-view.php","nya=service&act=view&id="+$(form).parent().attr("id"));
 					}
 				});
 			}
@@ -74,11 +74,11 @@ include '../../core/query.php';
   $(document).ready(function(){
     rawr();
     setTimeout(function(){
-      $('.employee .img').animate({opacity:1},900);
+      $('.service .img').animate({opacity:1},900);
     },50);
   });
     </script>
-<div id="employee-view-nav">
+<div id="service-view-nav">
 	<input type="text" value="<?php if(isset($_GET['loli'])) echo $_GET['loli']; else echo "";?>" id="buscador" placeholder="Buscar" />
 	<input type="hidden" id="result" disabled="disabled"/>
 	<!--Total de clientes: <?php echo $count; ?>-->&nbsp;&nbsp;&nbsp;
@@ -89,7 +89,7 @@ include '../../core/query.php';
 		if(isset($_GET['max_result'])) $limite=$_GET['max_result']; 
 		else $limite=10;
 		if($cosita>1){ ?>
-			<a title='Página #<?php echo $cosita-1; ?>' href='ui/employee-view.php?nya=employee&amp;act=view&amp;start=<?php echo ($cosita-2)*$limite; ?>&amp;max_result=<?php echo $limite; ?>&amp;page=<?php echo $cosita-1; ?>' class='query'><</a>
+			<a title='Página #<?php echo $cosita-1; ?>' href='ui/service-view.php?nya=service&amp;act=view&amp;start=<?php echo ($cosita-2)*$limite; ?>&amp;max_result=<?php echo $limite; ?>&amp;page=<?php echo $cosita-1; ?>' class='query'><</a>
 		<?php } else { ?>
 			<a>&lt;</a>
 		<?php }
@@ -97,14 +97,14 @@ include '../../core/query.php';
 			$thingie = $cuenta==0 ? 0 : $cuenta*$limite;
 			if($cosita!=$loli) {
 				if($thingie<$count){ ?>
-					<a title='Página #<?php echo $loli;?>' href='ui/employee-view.php?nya=employee&amp;act=view&amp;start=<?php echo $thingie/* > 1 ? $thingie-1 : 0*/; ?>&amp;max_result=<?php echo $limite; ?>&amp;page=<?php echo $loli; ?>' class='query'><? echo $loli; ?></a>
+					<a title='Página #<?php echo $loli;?>' href='ui/service-view.php?nya=service&amp;act=view&amp;start=<?php echo $thingie/* > 1 ? $thingie-1 : 0*/; ?>&amp;max_result=<?php echo $limite; ?>&amp;page=<?php echo $loli; ?>' class='query'><? echo $loli; ?></a>
 				<?php } ?>
 			<?php } else { ?>
 				<a title='Página #<?echo $loli;?>' class='active'><?echo $loli;?></a>
 			<?php }
 		} ?>
 		<?php if($cosita*$limite<$count){ ?>
-			<a title='Página #<?php echo $cosita+1; ?>' href='ui/employee-view.php?nya=employee&amp;act=view&amp;start=<? echo $cosita*$limite; ?>&amp;max_result=<?php echo $limite; ?>&amp;page=<?php echo $cosita+1; ?>' class='query'>></a>
+			<a title='Página #<?php echo $cosita+1; ?>' href='ui/service-view.php?nya=service&amp;act=view&amp;start=<? echo $cosita*$limite; ?>&amp;max_result=<?php echo $limite; ?>&amp;page=<?php echo $cosita+1; ?>' class='query'>></a>
 		<?php } else { ?>
 			<a>&gt;</a>
 		<?php } ?>
@@ -113,14 +113,14 @@ include '../../core/query.php';
 <div id="results">
 	<?php 
 	foreach($result as $key => $arr) { ?>
-	<div class="employee display" id="<?php echo $arr['idempleado']; ?>">
+	<div class="service display" id="<?php echo $arr['idEmpleado']; ?>">
 		<p style="line-height:80%;">&nbsp;</p>
 		<form id="update<?php echo $key;?>" action="../core/query.php" method="post">
-			<input type="hidden" name="nya" value="employee" />
+			<input type="hidden" name="nya" value="service" />
 			<input type="hidden" name="act" value="update" />
-			<input type="hidden" name="id" value=<?php echo $arr['idempleado']; ?> />
-      <img class="img" onclick="window.open('<? echo WEB_PATH . "img/employee/".$arr['foto']; ?>','_blank')" id="filename" src="<? echo WEB_PATH . "img/employee/".$arr['foto']; ?>" />
-			<input type="file" name="img" id="img" accept="image/gif,image/jpeg,image/png" class="hide" style="width:150px;"/><br>
+			<input type="hidden" name="id" value=<?php echo $arr['idEmpleado']; ?> />
+      <img class="img" onclick="window.open('<? echo WEB_PATH . "img/service/".$arr['foto']; ?>','_blank')" id="filename" src="<? echo WEB_PATH . "img/service/thumb/t_".$arr['foto']; ?>" />
+			<input type="file" name="foto" id="foto" accept="image/gif,image/jpeg,image/png" class="hide" style="width:150px;"/><br>
 			<a title="Nombre" id="name">
 				<div class="flechita"></div> 
 				<?php echo $arr['nombre']; ?>
@@ -144,23 +144,6 @@ include '../../core/query.php';
     				<option value='T' <? if($arr['tipo']=='T') echo ("selected"); ?> >Técnico</option>
             <option value='A' <? if($arr['tipo']=='A') echo ("selected"); ?> >Administrativo</option>
     	</select> <br />
-      <div class="extra_info">
-        <? if($arr['tipo'] == 'T'){ ?>
-          <a title="Area" id="area">
-            <div class="flechita"></div> 
-            Area: <?php echo $arr['area']; ?>
-          </a>
-        <? } else { ?>
-          <a title="Salario" id="salary">
-            <div class="flechita"></div> 
-            Salario: $<?php echo $arr['salario']; ?>
-          </a><br />
-          <a title="Horas" id="hours">
-            <div class="flechita"></div> 
-            Horas: <?php echo $arr['horas']; ?>
-          </a>
-        <? }?>
-      </div>
 			<input type="submit" class="hide boton" value="Actualizar" id="submit"/> 
 			<button type="button" class="hide boton">Cancelar</button>
 		</form>

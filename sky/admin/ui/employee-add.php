@@ -111,8 +111,9 @@
     		<label for="hiredt">Fecha de contratación</label><br />
         <input type="date" name="hiredt" id="hiredt" tabindex="9" /> <br />
         <label for="img" >Fotografia</label> <br />
-    	<input type="file" name="img" id="img" accept="image/*" tabindex="10" /> <br />
+    	<input type="file" name="img" id="img" accept="image/*" tabindex="10" onchange="javascript: readURL(this);" /> <br />
       </div>
+      <img title="Previsualizacion" style="float:left;" id="preview" class="hide" height=100 /><br/>
     </form>
     <script>
       document.getElementById('hiredt').value = new Date().toISOString().slice(0,10);
