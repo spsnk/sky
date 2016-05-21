@@ -112,8 +112,10 @@ switch($nya){
 						$data=array(getGETPOST('id'));
 						$sth = $DBH->prepare('
             SELECT e.*,t.area,a.salario,a.horas
-            FROM empleado e, tecnico t, administrativo a
-            where (e.idEmpleado = t.idEmpleado or e.idEmpleado = a.idEmpleado)
+            FROM empleado e
+            LEFT JOIN tecnico t ON e.idEmpleado = t.idEmpleado
+            LEFT JOIN administrativo a ON e.idEmpleado = a.idEmpleado
+            WHERE (t.idEmpleado IS NULL OR a.idEmpleado IS NULL)
             and e.idEmpleado = ?
             ');
 						$sth->execute($data);
@@ -164,9 +166,9 @@ switch($nya){
 					$autocomplete = getGETPOST('term');
 				else
 					die("No data received.");
-				$data = array("%".$autocomplete."%");
+				$data = array("%".$autocomplete."%","%".$autocomplete."%","%".$autocomplete."%");
 				try {
-					$sth = $DBH->prepare('SELECT ID AS value, name AS label FROM client WHERE name LIKE ? LIMIT 15');
+					$sth = $DBH->prepare('SELECT idempleado AS value, CONCAT(nombre," ",ap," ",am) AS label FROM empleado WHERE nombre LIKE ? OR ap like ? or am like ? LIMIT 15');
 					$sth->execute($data);
 				} catch(PDOException $e){
 					echo $e->getMessage();
@@ -180,16 +182,14 @@ switch($nya){
 					$id = getGETPOST('id'); 
 				else 
 					die("No valid ID specified.");
-				if(getGETPOST('name')!="") 
-					$name = getGETPOST('name'); 
-				if(getGETPOST('phone')!="" || strpos(getGETPOST('phone'),"_") !== false) 
-					$phone = getGETPOST('phone'); 
-				else 
-					$phone = NULL;
-				echo"</br>Data Received for update: <br />ID: $id <br />Name: $name <br />Address: $address <br />Phone: $phone <br /> ";
-				$data = array($name,$address,$phone,$id);
+				$name   = getGETPOST('name');
+				$ap     = getGETPOST('ap');
+				$am     = getGETPOST('am');
+				$hiredt	= getGETPOST('hiredt');
+				$type   = getGETPOST('type');
+				$data = array($name,$ap,$am,$hiredt,$type,$id);
 				try {
-					$sth = $DBH->prepare('UPDATE client SET Nombre=?,ap=?,am=?,Telefono=?,Calle=?,Colonia=?,CP=?,fechaNacimiento=?,password=? WHERE id=?');
+					$sth = $DBH->prepare('UPDATE empleado SET Nombre=?,ap=?,am=?,fechacontratacion=?,tipo=? WHERE idempleado=?');
 					$sth->execute($data);
 				} catch(PDOException $e){
 					echo $e->getMessage();

@@ -25,13 +25,13 @@
 
         <!-- Projects Row -->
         <div class="row">
-            <div class="col-md-4 img-portfolio">
-                <a href="portfolio-item.html">
                  <?php
                     $Canal=getquery("SELECT * from canal;");
 
                         foreach ($Canal as $value) {
                            echo ' 
+            <div class="col-md-4 img-portfolio">
+                <a href="portfolio-item.html">
                     <img src="img/channel/'.$value["logo"].'"class="img-responsive" style="width:200px; " >
                      </a>
                 <h3>
