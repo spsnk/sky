@@ -193,6 +193,23 @@ CREATE TABLE `pago` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Temporary table structure for view `paqcanal`
+--
+
+DROP TABLE IF EXISTS `paqcanal`;
+/*!50001 DROP VIEW IF EXISTS `paqcanal`*/;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+/*!50001 CREATE TABLE `paqcanal` (
+  `idPaquete` tinyint NOT NULL,
+  `Nombre` tinyint NOT NULL,
+  `Renta` tinyint NOT NULL,
+  `descripcion` tinyint NOT NULL,
+  `canalid` tinyint NOT NULL
+) ENGINE=MyISAM */;
+SET character_set_client = @saved_cs_client;
+
+--
 -- Table structure for table `paquete`
 --
 
@@ -254,6 +271,25 @@ CREATE TABLE `tecnico` (
   CONSTRAINT `tecnico_ibfk_1` FOREIGN KEY (`idEmpleado`) REFERENCES `empleado` (`idEmpleado`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Final view structure for view `paqcanal`
+--
+
+/*!50001 DROP TABLE IF EXISTS `paqcanal`*/;
+/*!50001 DROP VIEW IF EXISTS `paqcanal`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8 */;
+/*!50001 SET character_set_results     = utf8 */;
+/*!50001 SET collation_connection      = utf8_general_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
+/*!50001 VIEW `paqcanal` AS select `paquete`.`idPaquete` AS `idPaquete`,`paquete`.`Nombre` AS `Nombre`,`paquete`.`Renta` AS `Renta`,`paquete`.`descripcion` AS `descripcion`,group_concat(cast(`canalpaquete`.`idCanal` as char charset utf8) order by `canalpaquete`.`idCanal` ASC separator ',') AS `canalid` from (`paquete` left join `canalpaquete` on((`paquete`.`idPaquete` = `canalpaquete`.`idPaquete`))) group by `paquete`.`idPaquete` */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -264,4 +300,4 @@ CREATE TABLE `tecnico` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-05-20  1:23:34
+-- Dump completed on 2016-05-31 18:08:18

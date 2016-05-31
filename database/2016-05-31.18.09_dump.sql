@@ -283,6 +283,23 @@ INSERT INTO `pago` VALUES (1,914.3,'cobro renta','2016-04-18 19:28:44',NULL,14,N
 UNLOCK TABLES;
 
 --
+-- Temporary table structure for view `paqcanal`
+--
+
+DROP TABLE IF EXISTS `paqcanal`;
+/*!50001 DROP VIEW IF EXISTS `paqcanal`*/;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+/*!50001 CREATE TABLE `paqcanal` (
+  `idPaquete` tinyint NOT NULL,
+  `Nombre` tinyint NOT NULL,
+  `Renta` tinyint NOT NULL,
+  `descripcion` tinyint NOT NULL,
+  `canalid` tinyint NOT NULL
+) ENGINE=MyISAM */;
+SET character_set_client = @saved_cs_client;
+
+--
 -- Table structure for table `paquete`
 --
 
@@ -384,6 +401,25 @@ LOCK TABLES `tecnico` WRITE;
 INSERT INTO `tecnico` VALUES (1,'Norte'),(2,'Norte'),(3,'Norte'),(4,'Norte'),(5,'Norte'),(6,'Norte'),(7,'Norte'),(8,'Norte'),(9,'Norte'),(10,'Norte'),(11,'Sur'),(12,'Sur'),(13,'Sur'),(14,'Sur'),(15,'Sur'),(16,'Sur'),(17,'Sur'),(18,'Sur'),(19,'Sur'),(20,'Sur'),(21,'Este'),(22,'Este'),(23,'Este'),(24,'Este'),(25,'Este'),(26,'Este'),(27,'Este'),(28,'Este'),(29,'Este'),(30,'Este'),(31,'Oeste'),(32,'Oeste'),(33,'Oeste'),(34,'Oeste'),(35,'Oeste'),(36,'Oeste'),(37,'Oeste'),(38,'Oeste'),(39,'Oeste'),(40,'Oeste');
 /*!40000 ALTER TABLE `tecnico` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Final view structure for view `paqcanal`
+--
+
+/*!50001 DROP TABLE IF EXISTS `paqcanal`*/;
+/*!50001 DROP VIEW IF EXISTS `paqcanal`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8 */;
+/*!50001 SET character_set_results     = utf8 */;
+/*!50001 SET collation_connection      = utf8_general_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
+/*!50001 VIEW `paqcanal` AS select `paquete`.`idPaquete` AS `idPaquete`,`paquete`.`Nombre` AS `Nombre`,`paquete`.`Renta` AS `Renta`,`paquete`.`descripcion` AS `descripcion`,group_concat(cast(`canalpaquete`.`idCanal` as char charset utf8) order by `canalpaquete`.`idCanal` ASC separator ',') AS `canalid` from (`paquete` left join `canalpaquete` on((`paquete`.`idPaquete` = `canalpaquete`.`idPaquete`))) group by `paquete`.`idPaquete` */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -394,4 +430,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-05-20  1:22:57
+-- Dump completed on 2016-05-31 18:09:10
