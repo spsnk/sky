@@ -112,7 +112,7 @@ include '../../core/query.php';
 </div>
 <div id="results">
 	<?php 
-	foreach($result as $key => $arr) { ?>
+	foreach($result as $key => $arr) {?>
 	<div class="channel display" id="<?php echo $arr['idcanal']; ?>">
 		<p style="line-height:80%;">&nbsp;</p>
 		<form id="update<?php echo $key;?>" action="../core/query.php" method="post">

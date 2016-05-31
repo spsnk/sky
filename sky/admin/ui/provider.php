@@ -1,5 +1,5 @@
 <?php
-$nya='payment';
+$nya='provider';
 if(isset($_GET['act'])) 
 	$act=$_GET['act'];
 else
@@ -13,10 +13,10 @@ else
 rawr();
 $("#query").load("ui/<?php echo "$nya-$act.php"; ?>","nya=<? echo $nya; ?>&act=<? echo $act; ?>&id=<? echo $id; ?>&max_result=10");
 </script>
-<h1>Pagos</h1>
-<div id="payment-nav" class="nav">
-	<a href="ui/payment-view.php" id="nya=payment&amp;act=view&amp;max_result=10" class="query">Consulta</a>
-	<a href="ui/payment-add.php" id="nya=payment&amp;" class="query">Agregar</a>
+<h1>Proveedores</h1>
+<div id="provider-nav" class="nav">
+	<a href="ui/provider-view.php" id="nya=provider&amp;act=view&amp;max_result=10" class="query">Consulta</a>
+	<a href="ui/provider-add.php" id="nya=provider&amp;" class="query">Agregar</a>
 	<!--<a  href="../core/query.php" class="query" id="nya=client&amp;act=modify">Modificar</a>
 	<a  href="../core/query.php" class="query" id="nya=client&amp;act=delete">Eliminar</a>-->
 </div>

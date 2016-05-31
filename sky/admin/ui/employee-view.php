@@ -149,6 +149,8 @@ include '../../core/query.php';
     				<option value='T' <? if($arr['tipo']=='T') echo ("selected"); ?> >Técnico</option>
             <option value='A' <? if($arr['tipo']=='A') echo ("selected"); ?> >Administrativo</option>
     	</select> <br />
+			<input type="submit" class="hide boton" value="Actualizar" id="submit"/> 
+			<button type="button" class="hide boton">Cancelar</button>
       <div class="extra_info">
         <? if($arr['tipo'] == 'T'){ ?>
           <a title="Area" id="area">
@@ -163,11 +165,9 @@ include '../../core/query.php';
           <a title="Horas" id="hours">
             <div class="flechita"></div> 
             Horas: <?php echo $arr['horas']; ?>
-          </a>
+          </a><br />
         <? }?>
       </div>
-			<input type="submit" class="hide boton" value="Actualizar" id="submit"/> 
-			<button type="button" class="hide boton">Cancelar</button>
 		</form>
 	</div>
 	<? } ?><br>

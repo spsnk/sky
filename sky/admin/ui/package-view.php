@@ -116,7 +116,9 @@ include '../../core/query.php';
 </div>
 <div id="results">
 	<?php 
-	foreach($result as $key => $arr) { ?>
+	foreach($result as $key => $arr) {  
+  $arr['canalid']=explode( ',' , $arr['canalid'] );
+  ?>
 	<div class="package display" id="<?php echo $arr['idpaquete']; ?>">
 		<p style="line-height:80%;">&nbsp;</p>
 		<form id="update<?php echo $key;?>" action="../core/query.php" method="post">
@@ -141,9 +143,9 @@ include '../../core/query.php';
 			<input type="submit" class="hide boton" value="Actualizar" id="submit"/> 
 			<button type="button" class="hide boton">Cancelar</button>
       <div class="multiple_select">
-				<? foreach($channels as $key => $arr){?>
-          <input type="checkbox" value="<?echo $arr['idcanal'];?>" name="channels[]" id="chn<?echo $key;?>" class="hide"/>
-          <label for="chn<?echo $key;?>"><?echo $arr['nombre'];?></label>
+				<? foreach($channels as $key2 => $arr2){?>
+          <input type="checkbox" value="<?echo $arr2['idcanal'];?>" name="channels[]" id="chn<?echo $key2;?>" class="hide" <? if(in_array($arr2['idcanal'],$arr['canalid'])) echo "checked";?>/>
+          <label for="chn<?echo $key2;?>" <? if(in_array($arr2['idcanal'],$arr['canalid'])) echo 'class="active"';?> ><?echo $arr2['nombre'];?></label>
         <?}?>
 			</div>
 		</form>

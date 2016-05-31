@@ -44,12 +44,12 @@
 				<a href="ui/client.php" class="ajax">
 				<div class="flechita"></div>
 				Clientes </a>
-				<a href="ui/payment.php" class="ajax">
-				<div class="flechita"></div>
-				Pagos </a>
 				<a href="ui/provider.php" class="ajax">
 				<div class="flechita"></div>
 				Proveedores </a>
+				<a href="ui/payment.php" class="ajax">
+				<div class="flechita"></div>
+				Pagos </a>
 			</div>
 			<div id="devmenu">
 				<a onclick="$('#ajax').html('');">CLS</a><br>

@@ -1,10 +1,11 @@
 <?php
+$nya = "client";
+$act = "details";
 include '../../core/query.php';
 ?>
 <script type="text/javascript">
 $(document).ready(function(){
 	rawr();
-	//clientView();
   $('#buscador').autocomplete({
 		source: "../core/query.php?nya=client&act=search",
 		minLength: 2,
@@ -16,7 +17,8 @@ $(document).ready(function(){
 		select: function( event, ui ) {
 			$( "#buscador" ).val( ui.item.label );
 			$( "#result" ).val( ui.item.value );
-			lolisearch($('#result'),$(this),"client");
+			//lolisearch($('#result'),$(this),"client");
+      clickclient($('#result').val());
 			return false;
 		}
 	}).focus(function(){
@@ -40,6 +42,14 @@ function clientesearch(result,text,act) {
 				// .fadeOut(500,function(){$(this).html("").show();});
 		});
 	}
+}
+function clickclient(val) {
+  var href="ui/client-addpack.php";
+  var get="nya=client&act=details&id="+val;
+  $("#query").load(href,get,function(response, status, xhr){
+    if (status == "error")
+      $("#status").html(href+" "+xhr.statusText+" "+xhr.status);
+  });
 }
 </script>
 <div id="client-view-nav">
@@ -116,7 +126,6 @@ function clientesearch(result,text,act) {
 			<input type="submit" class="hide boton" value="Actualizar" id="submit"/> 
 			<button type="button" class="hide boton">Cancelar</button>
 		</form>
-    <button type="button" onclick="javascript: clickclient(<?php echo $arr['nocuenta']; ?>);" class="boton">Detalles</button>
 	</div>
 	<? } ?><br>
 </div>

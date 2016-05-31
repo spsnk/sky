@@ -3,7 +3,7 @@ include '../../core/query.php';
 ?>
 <script type="text/javascript">
   $('#buscador').autocomplete({
-		source: "../core/query.php?nya=payment&act=search",
+		source: "../core/query.php?nya=provider&act=search",
 		minLength: 2,
 		focus: function( event, ui ) {
 			$( "#buscador" ).val( ui.item.label );
@@ -13,7 +13,7 @@ include '../../core/query.php';
 		select: function( event, ui ) {
 			$( "#buscador" ).val( ui.item.label );
 			$( "#result" ).val( ui.item.value );
-			lolisearch($('#result'),$(this),"payment");
+			lolisearch($('#result'),$(this),"provider");
 			return false;
 		}
 	}).focus(function(){
@@ -47,7 +47,7 @@ include '../../core/query.php';
 			$(parentdiv+' input[type="checkbox"]').removeClass('hide');
 		}
 	});
-	$('div.payment.display form').each(function(){
+	$('div.provider.display form').each(function(){
 		//alert($(this).attr('id'));
 		$(this).validate({
 			submitHandler: function(form) {
@@ -57,7 +57,7 @@ include '../../core/query.php';
 					},
 					target: '#debug',
 					success:    function() { 
-						$('#query').load("ui/payment-view.php","nya=payment&act=view&id="+$(form).parent().attr("id"));
+						$('#query').load("ui/provider-view.php","nya=provider&act=view&id="+$(form).parent().attr("id"));
 					}
 				});
 			}
@@ -74,11 +74,11 @@ include '../../core/query.php';
   $(document).ready(function(){
     rawr();
     setTimeout(function(){
-      $('.payment .img').animate({opacity:1},900);
+      $('.provider .img').animate({opacity:1},900);
     },50);
   });
     </script>
-<div id="payment-view-nav">
+<div id="provider-view-nav">
 	<input type="text" value="<?php if(isset($_GET['loli'])) echo $_GET['loli']; else echo "";?>" id="buscador" placeholder="Buscar" />
 	<input type="hidden" id="result" disabled="disabled"/>
 	<!--Total de clientes: <?php echo $count; ?>-->&nbsp;&nbsp;&nbsp;
@@ -89,7 +89,7 @@ include '../../core/query.php';
 		if(isset($_GET['max_result'])) $limite=$_GET['max_result']; 
 		else $limite=10;
 		if($cosita>1){ ?>
-			<a title='Página #<?php echo $cosita-1; ?>' href='ui/payment-view.php?nya=payment&amp;act=view&amp;start=<?php echo ($cosita-2)*$limite; ?>&amp;max_result=<?php echo $limite; ?>&amp;page=<?php echo $cosita-1; ?>' class='query'><</a>
+			<a title='Página #<?php echo $cosita-1; ?>' href='ui/provider-view.php?nya=provider&amp;act=view&amp;start=<?php echo ($cosita-2)*$limite; ?>&amp;max_result=<?php echo $limite; ?>&amp;page=<?php echo $cosita-1; ?>' class='query'><</a>
 		<?php } else { ?>
 			<a>&lt;</a>
 		<?php }
@@ -97,14 +97,14 @@ include '../../core/query.php';
 			$thingie = $cuenta==0 ? 0 : $cuenta*$limite;
 			if($cosita!=$loli) {
 				if($thingie<$count){ ?>
-					<a title='Página #<?php echo $loli;?>' href='ui/payment-view.php?nya=payment&amp;act=view&amp;start=<?php echo $thingie/* > 1 ? $thingie-1 : 0*/; ?>&amp;max_result=<?php echo $limite; ?>&amp;page=<?php echo $loli; ?>' class='query'><? echo $loli; ?></a>
+					<a title='Página #<?php echo $loli;?>' href='ui/provider-view.php?nya=provider&amp;act=view&amp;start=<?php echo $thingie/* > 1 ? $thingie-1 : 0*/; ?>&amp;max_result=<?php echo $limite; ?>&amp;page=<?php echo $loli; ?>' class='query'><? echo $loli; ?></a>
 				<?php } ?>
 			<?php } else { ?>
 				<a title='Página #<?echo $loli;?>' class='active'><?echo $loli;?></a>
 			<?php }
 		} ?>
 		<?php if($cosita*$limite<$count){ ?>
-			<a title='Página #<?php echo $cosita+1; ?>' href='ui/payment-view.php?nya=payment&amp;act=view&amp;start=<? echo $cosita*$limite; ?>&amp;max_result=<?php echo $limite; ?>&amp;page=<?php echo $cosita+1; ?>' class='query'>></a>
+			<a title='Página #<?php echo $cosita+1; ?>' href='ui/provider-view.php?nya=provider&amp;act=view&amp;start=<? echo $cosita*$limite; ?>&amp;max_result=<?php echo $limite; ?>&amp;page=<?php echo $cosita+1; ?>' class='query'>></a>
 		<?php } else { ?>
 			<a>&gt;</a>
 		<?php } ?>
@@ -113,59 +113,27 @@ include '../../core/query.php';
 <div id="results">
 	<?php 
 	foreach($result as $key => $arr) { ?>
-	<div class="payment display" id="<?php echo $arr['idtransaccion']; ?>">
+	<div class="provider display" id="<?php echo $arr['idproveedor']; ?>">
 		<p style="line-height:80%;">&nbsp;</p>
 		<form id="update<?php echo $key;?>" action="../core/query.php" method="post">
-			<input type="hidden" name="nya" value="payment" />
+			<input type="hidden" name="nya" value="provider" />
 			<input type="hidden" name="act" value="update" />
-			<input type="hidden" name="id" value=<?php echo $arr['idtransaccion']; ?> />
-			<a title="Concepto" id="name">
+			<input type="hidden" name="id" value=<?php echo $arr['idproveedor']; ?> />
+			<a title="Nombre" id="name">
 				<div class="flechita"></div> 
-				<?php echo $arr['concepto']; ?>
+				<?php echo $arr['nombre']; ?>
 			</a>
-			<input type="text" name="name" value="<?echo htmlspecialchars($arr['concepto']);?>" class="hide" maxlength="40" id="name"/><br />
-			<a title="Monto" id="desc">
+			<input type="text" name="name" value="<?echo htmlspecialchars($arr['nombre']);?>" class="hide" maxlength="40" id="name"/><br />
+			<a title="Dirección" id="desc">
 				<div class="flechita"></div> 
-				$<?php echo $arr['monto']; ?>
+				<?php echo $arr['direccion']; ?>
 			</a>
-			<input type="text" name="desc" value="<?echo htmlspecialchars($arr['monto']);?>" class="hide" maxlength="40" id="desc"/><br />
-			<a title="Fecha de transaccion" id="date">
+			<input type="text" name="desc" value="<?echo htmlspecialchars($arr['direccion']);?>" class="hide" maxlength="40" id="desc"/><br />
+			<a title="Teléfono" id="desc">
 				<div class="flechita"></div> 
-				<?php echo $arr['fecha']; ?>
+				<?php echo $arr['telefono']; ?>
 			</a>
-      <input class="hide" type="datetime-local" name="date" id="date" tabindex="4" />
-      <br />
-      <script>
-       $('#update<?php echo $key;?> input#date').val(new Date("<?echo $arr['fecha'];?>").toJSON().slice(0,19));
-      </script>
-			<a title="Origen" id="date">
-				<div class="flechita"></div> 
-				<?php if($arr['idempleado']!=""){ echo "Empleado"; $type = "e"; }
-              else if($arr['nocuenta']!="") { echo "Cliente"; $type = "c"; }
-              else if($arr['idproveedor']!="") { echo "Proveedor"; $type = "p"; } ?>
-			</a><br/>
-			<a title="Origen" id="date">
-				<div class="flechita"></div> 
-				<?php switch($type){
-          case 'e':
-            echo $arr['ena']." ".$arr['eap']." ".$arr['eam'];
-          break;
-          case 'c':
-            echo $arr['cna']." ".$arr['cap']." ".$arr['cam'];
-          break;
-          case 'p':
-            echo $arr['pna'];
-          break;
-        }?>
-			</a>
-      <select class="hide" name="origin" id="origin" required autocomplete="off" tabindex="5">
-        <option value disabled>Origen/Destino</option>
-        <option value="e" <? if($arr['idempleado']!="") echo "selected"; ?>>Empleado</option>
-        <option value="c" <? if($arr['nocuenta']!="") echo "selected"; ?>>Cliente</option>
-        <option value="p" <? if($arr['idproveedor']!="") echo "selected"; ?>>Proveedor</option>
-      </select> <br />
-      <input type="text" class="hide" id="busca" required placeholder="Buscar" tabindex="6" style="width:200px;" />
-      <input type="hidden" id="id" required placeholder="Buscar" />
+			<input type="text" name="desc" value="<?echo htmlspecialchars($arr['telefono']);?>" class="hide" maxlength="40" id="desc"/><br />
 			<input type="submit" class="hide boton" value="Actualizar" id="submit"/> 
 			<button type="button" class="hide boton">Cancelar</button>
 		</form>

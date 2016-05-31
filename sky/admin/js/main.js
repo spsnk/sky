@@ -95,6 +95,21 @@ function lolisearch(result,text,act) {
 	}
 }
 
+function clickclient(val) {
+	//if(!isNaN(result.val())) {
+		var href="ui/client-addpack.php";
+		var get="nya=client&act=details&id="+val;
+		//$("#status").html(ajax_load);
+		$("#query").load(href,get,function(response, status, xhr){
+			if (status == "error")
+				$("#status").html(href+" "+xhr.statusText+" "+xhr.status);
+			// else
+				// $("#status")//.html(ajax_ready)
+				// .fadeOut(500,function(){$(this).html("").show();});
+		});
+	//}
+}
+
 function checkForEnter (event) {
 	if (event.keyCode == 13) {
 		var textboxes = $("[type=text]:visible");

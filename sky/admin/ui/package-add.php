@@ -90,7 +90,7 @@
 	<div class="multiple_select" style="height:400px;">
 		<p>Canales</p>
 		<? foreach($channels as $key => $arr){?>
-			<input type="checkbox" value="<?echo $arr['idcanal'];?>" name="channels[]" id="chn<?echo $key;?>" class="hide"/>
+			<input type="checkbox" value="<?echo $arr['idcanal'];?>" name="chans[]" id="chn<?echo $key;?>" class="hide"/>
 			<label for="chn<?echo $key;?>"><?echo $arr['nombre'];?></label>
 		<?}?>
 	</div>

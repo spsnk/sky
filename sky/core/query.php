@@ -168,7 +168,7 @@ switch($nya){
 					die("No data received.");
 				$data = array("%".$autocomplete."%","%".$autocomplete."%","%".$autocomplete."%");
 				try {
-					$sth = $DBH->prepare('SELECT idempleado AS value, CONCAT(nombre," ",ap," ",am) AS label FROM empleado WHERE nombre LIKE ? OR ap like ? or am like ? LIMIT 15');
+					$sth = $DBH->prepare('SELECT idempleado AS value, CONCAT(nombre," ",ap," ",am) AS label FROM empleado WHERE nombre LIKE ? OR ap like ? or am like ? LIMIT 20');
 					$sth->execute($data);
 				} catch(PDOException $e){
 					echo $e->getMessage();
@@ -213,6 +213,64 @@ switch($nya){
   break;
   case 'channel':
     switch($act){
+      case 'add':
+				$name   = getGETPOST('name');
+				$desc     = getGETPOST('desc');
+        if (!array_key_exists("img",$_FILES)||($_FILES["img"]["error"] > 0 && $_FILES["img"]["error"] != 4) ){
+					//echo ("Error: " . $_FILES["img"]["error"] . "<br />");
+          echo ("No file uploaded");
+          $filename = "noimage.png";
+				} else {
+					if( $_FILES["img"]["error"] == 4 ){
+						$filename = "noimage.png";
+						echo("No file Uploaded, default image will be used");
+					} else {
+						if (($_FILES["img"]["type"] != "image/gif")
+							&& ($_FILES["img"]["type"] != "image/jpeg")
+							&& ($_FILES["img"]["type"] != "image/pjpeg")
+							&& ($_FILES["img"]["type"] != "image/png")){
+                echo("Invalid File");
+                $filename = "noimage.png";
+            } else {
+              echo "Upload: " . $_FILES["img"]["name"] . "<br />";
+              echo "Type: " . $_FILES["img"]["type"] . "<br />";
+              echo "Size: " . ($_FILES["img"]["size"] / 1024) . " Kb<br />";
+              echo "Temp file: " . $_FILES["img"]["tmp_name"]."<br />";
+              $hash = md5_file($_FILES["img"]["tmp_name"]);
+              $file_ext = substr($_FILES["img"]["name"], strripos($_FILES["img"]["name"], '.'));
+              if (file_exists(APP_PATH."img/employee/" . $hash . $file_ext)){
+                echo ($_FILES["img"]["name"] . " already exists, entry will be duplicated. ");
+                $filename = $hash . $file_ext;
+              } else {
+                move_uploaded_file($_FILES["img"]["tmp_name"],
+                APP_PATH."img/employee/" . $hash . $file_ext);
+                $filename = $hash . $file_ext;
+                include_once 'image.class.php';
+                $thumb = new thumb_image;
+                $thumb->GenerateThumbFile(APP_PATH . 'img/employee/'. $filename, APP_PATH . 'img/employee/thumb/t_' . $filename);
+                echo "Stored in: " . APP_PATH . "img/employee/" . $filename;
+                echo "<br /> Thumb stored in: " . APP_PATH . "img/employee/thumb/t_" . $filename;
+                echo "<br /><img src='". WEB_PATH . "img/employee/thumb/t_" . $filename ."' /><br />";
+                echo "<br /><img src='". WEB_PATH . "img/employee/" . $filename ."' />";
+              }
+            }
+          }
+				}
+        $data = array($name,$desc,$filename);
+        try {
+          $DBH->beginTransaction();
+          $sth = $DBH->prepare('INSERT INTO canal (nombre,descripcion,logo) VALUES(?,?,?)');
+          $sth->execute($data);
+          $lastClientId = $DBH->lastInsertId();
+          $DBH->commit();
+        } catch(PDOException $e){
+          echo $e->getMessage();
+          $DBH->rollBack();
+          print_r($data);
+          echo("<br /><b>Application Terminated, transaction rolled back. $nya->$act</b><script type='text/javascript'>var lastClient=0;</script>");
+        }
+        echo "<br /><b>Sucessfully added Channel.</b> <script type='text/javascript'>var lastClient=$lastClientId;</script>";
+      break;
       case 'view':
 				if(getGETPOST('id')!='') {
 					try {
@@ -253,10 +311,48 @@ switch($nya){
 				}
 				$result = stripslashes_deep($sth->fetchAll());
       break;
+			case 'search':
+				if(getGETPOST('term')!="") 
+					$autocomplete = getGETPOST('term');
+				else
+					die("No data received.");
+				$data = array("%".$autocomplete."%");
+				try {
+					$sth = $DBH->prepare('SELECT idcanal AS value, nombre AS label 
+          FROM canal 
+          WHERE nombre LIKE ?
+          LIMIT 20');
+					$sth->execute($data);
+				} catch(PDOException $e){
+					echo $e->getMessage();
+					die("<br /><b>Application Terminated. $nya->$act</b>");
+				}
+				$result = stripslashes_deep($sth->fetchAll());
+				die(json_encode($result));
+			break;
     }
   break;
   case 'service':
     switch($act){
+      case 'add':
+				$name   = getGETPOST('name');
+				$desc   = getGETPOST('desc');
+				$cost   = getGETPOST('cost');
+        $data = array($name,$desc,$cost);
+        try {
+          $DBH->beginTransaction();
+          $sth = $DBH->prepare('INSERT INTO servicio (nombre,descripcion,costo) VALUES(?,?,?)');
+          $sth->execute($data);
+          $lastClientId = $DBH->lastInsertId();
+          $DBH->commit();
+        } catch(PDOException $e){
+          echo $e->getMessage();
+          $DBH->rollBack();
+          print_r($data);
+          echo("<br /><b>Application Terminated, transaction rolled back. $nya->$act</b><script type='text/javascript'>var lastClient=0;</script>");
+        }
+        echo "<br /><b>Sucessfully added Service.</b> <script type='text/javascript'>var lastClient=$lastClientId;</script>";
+      break;
       case 'view':
 				if(getGETPOST('id')!='') {
 					try {
@@ -313,7 +409,7 @@ switch($nya){
             try {
               $data=array(getGETPOST('id'));
               $sth = $DBH->prepare('
-              SELECT * from paquete where idpaquete = ?
+              SELECT * from paqcanal where idpaquete = ?
               ');
               $sth->execute($data);
             } catch(PDOException $e){
@@ -332,13 +428,13 @@ switch($nya){
             try {
               $sth = $DBH->prepare('
               SELECT *
-              FROM paquete
+              FROM paqcanal
               LIMIT ?, ?
               ');
               $sth->bindValue(1, $start, PDO::PARAM_INT);
               $sth->bindValue(2, $limit, PDO::PARAM_INT);
               $sth->execute();
-              $countsth = $DBH->query('SELECT COUNT(*) AS total FROM paquete');
+              $countsth = $DBH->query('SELECT COUNT(*) AS total FROM paqcanal');
             } catch(PDOException $e){
               echo $e->getMessage();
               die("<br /><b>Application Terminated. $nya->$act</b>");
@@ -348,6 +444,34 @@ switch($nya){
           }
           $result = stripslashes_deep($sth->fetchAll());
         break; 
+			case 'add':
+				$name     = getGETPOST('name');
+				$cost     = getGETPOST('cost');
+				$desc     = getGETPOST('desc');
+				$chans    = getGETPOST('chans');
+				$data = array($name,$cost,$desc);
+				try {
+          $DBH->beginTransaction();
+					$sth = $DBH->prepare('INSERT INTO paquete (nombre,renta,descripcion) VALUES(?,?,?)');
+					$sth->execute($data);
+					$lastId = $DBH->lastInsertId();
+					if(is_array($chans)){
+						foreach($chans as $arr){
+							$data = array($lastId,$arr);
+							$sth = $DBH->prepare('INSERT INTO canalpaquete (idpaquete,idcanal) VALUES(?,?)');
+							$sth->execute($data);
+						}
+					}
+          $DBH->commit();
+				} catch(PDOException $e){
+          $DBH->rollBack();
+					echo $e->getMessage();
+					die("<br /><b>Application Terminated. $nya->$act</b>");
+				}
+            echo "<br /><b>Sucessfully added Package.</b> <script type='text/javascript'>var lastClient=$lastId;</script>";
+				//print_r($_POST);
+				//var_dump($_POST);
+			break;
       }
   break;
   case 'equipment':
@@ -453,7 +577,6 @@ switch($nya){
 						$start = (int)getGETPOST('start');
 					else
 						$start = 0;
-					//$data= array($start,$limit);
 					try {
 						$sth = $DBH->prepare('SELECT * FROM cliente LIMIT ?, ?');
 						$sth->bindValue(1, $start, PDO::PARAM_INT);
@@ -468,38 +591,27 @@ switch($nya){
 					$count = $count['total'];
 				}
 				$result = stripslashes_deep($sth->fetchAll());
-				//$encoded_results=array();
-				//for($i=0;$i < sizeof($result);$i++){
-					//echo $i.":".$result[$i]['ID']."=>".$result[$i]['name']."=>".$result[$i]['address']."=>".$result[$i]['phone']."<br />";
-					//$encoded_results = $encoded_results + array($result[$i]['ID']=>$result[$i]['name']);
-				//}
 			break;
 			case 'search':
 				if(getGETPOST('term')!="") 
 					$autocomplete = getGETPOST('term');
 				else
 					die("No data received.");
-				$data = array("%".$autocomplete."%");
+				$data = array("%".$autocomplete."%","%".$autocomplete."%","%".$autocomplete."%");
 				try {
-					$sth = $DBH->prepare('SELECT ID AS value, name AS label FROM client WHERE name LIKE ? LIMIT 15');
+					$sth = $DBH->prepare('
+          SELECT nocuenta AS value, concat(nombre," ",ap," ",am) AS label 
+          FROM cliente 
+          WHERE nombre LIKE ? 
+          OR ap like ?
+          or am like ?
+          LIMIT 15');
 					$sth->execute($data);
 				} catch(PDOException $e){
 					echo $e->getMessage();
 					die("<br /><b>Application Terminated. $nya->$act</b>");
 				}
 				$result = stripslashes_deep($sth->fetchAll());
-				// for($i=0;$i <= sizeof($result);$i++){
-					// echo $i." :";
-					// print_r($result[$i]);
-					// echo "<br />";
-				// }
-				// $encoded_results=array();
-				// for($i=0;$i < sizeof($result);$i++){
-					//echo $i.":".$result[$i]['ID']."=>".$result[$i]['name']."<br />";
-					// $encoded_results = $encoded_results + array($result[$i]['value']=>$result[$i]['label']);
-				// }
-				//print_r($encoded_results);
-				//echo "<br />";
 				die(json_encode($result));
 			break;
 			case 'update':
@@ -538,15 +650,307 @@ switch($nya){
 				$result = $sth->fetch();
 				die($result['total']);
 			break;
+			case 'details':
+				if(getGETPOST('id')!="") {
+					try {
+						$data=array(getGETPOST('id'));
+						$sth = $DBH->prepare('SELECT * FROM cliente WHERE nocuenta=?');
+						$sth->execute($data);
+            $result = stripslashes_deep($sth->fetchAll());
+            
+            $sth = $DBH->prepare('
+              SELECT * 
+              from pago
+              where nocuenta = ?
+              order by fecha desc
+              limit 1;
+            ');
+            $sth->execute($data);
+            $pago = stripslashes_deep($sth->fetchAll());
+            
+            $sth = $DBH->prepare('
+              SELECT dopaquete.*,
+                paquete.nombre,
+                paquete.renta,
+                paquete.descripcion,
+                equipo.notarjeta
+              from dopaquete
+              left join paquete on (dopaquete.idpaquete = paquete.idpaquete)
+              left join equipo on (dopaquete.idequipo = equipo.idequipo)
+              where nocuenta = ?
+              order by fechasubscripcion desc;
+            ');
+            $sth->execute($data);
+            $paquete = stripslashes_deep($sth->fetchAll());
+            print_r($result);
+            print_r($pago);
+            print_r($paquete);
+					} catch(PDOException $e){
+						echo $e->getMessage();
+						die("<br /><b>Application Terminated. $nya->$act</b>");
+					}
+				}else{
+          die("error, no data");
+        }
+			break;
 			default:
 				echo "No valid act received $nya-> \$act = '$act'"; break;
 		}
 	break;
-  
+  case 'payment':
+    switch($act){
+      case 'add':
+				$concept   = getGETPOST('concept1') . " " . getGETPOST('concept2');
+				$cost   = getGETPOST('cost');
+        $date   = getGETPOST('date');
+        $origin   = getGETPOST('origin');
+        $id   = getGETPOST('id');
+        $data = array($concept,$cost,$date,$id);
+        try {
+          $DBH->beginTransaction();
+          switch($origin){
+            case 'e':
+          $sth = $DBH->prepare('INSERT INTO pago (concepto,monto,fecha,idempleado) VALUES(?,?,?,?)');
+            break;
+            case 'c':
+          $sth = $DBH->prepare('INSERT INTO pago (concepto,monto,fecha,nocuenta) VALUES(?,?,?,?)');
+            break;
+            case 'p':
+          $sth = $DBH->prepare('INSERT INTO pago (concepto,monto,fecha,idproveedor) VALUES(?,?,?,?)');
+            break;
+          }
+          $sth->execute($data);
+          $lastClientId = $DBH->lastInsertId();
+          $DBH->commit();
+        } catch(PDOException $e){
+          echo $e->getMessage();
+          $DBH->rollBack();
+          print_r($data);
+          echo("<br /><b>Application Terminated, transaction rolled back. $nya->$act</b><script type='text/javascript'>var lastClient=0;</script>");
+        }
+        echo "<br /><b>Sucessfully added Channel.</b> <script type='text/javascript'>var lastClient=$lastClientId;</script>";
+      break;
+      case 'view':
+				if(getGETPOST('id')!='') {
+					try {
+						$data=array(getGETPOST('id'));
+						$sth = $DBH->prepare('
+              select pago.*,
+              cliente.nombre as cna, cliente.ap as cap, cliente.am as cam,
+              empleado.nombre as ena, empleado.ap as eap, empleado.am as eam,
+              proveedor.nombre as pna
+              from pago
+              left join cliente on pago.nocuenta = cliente.nocuenta
+              left join empleado on pago.idempleado = empleado.idempleado
+              left join proveedor on pago.idproveedor = proveedor.idproveedor
+              where idtransaccion = ?
+              group by pago.idtransaccion; 
+            ');
+						$sth->execute($data);
+					} catch(PDOException $e){
+						echo $e->getMessage();
+						die("<br /><b>Application Terminated. $nya->$act</b>");
+					}
+				} else {
+					if(getGETPOST('max_result')!="")
+						$limit = (int)getGETPOST('max_result');
+					else
+						$limit = 10;
+					if(getGETPOST('start')!="")
+						$start = (int)getGETPOST('start');
+					else
+						$start = 0;
+					try {
+						$sth = $DBH->prepare('
+              select pago.*,
+              cliente.nombre as cna, cliente.ap as cap, cliente.am as cam,
+              empleado.nombre as ena, empleado.ap as eap, empleado.am as eam,
+              proveedor.nombre as pna
+              from pago
+              left join cliente on pago.nocuenta = cliente.nocuenta
+              left join empleado on pago.idempleado = empleado.idempleado
+              left join proveedor on pago.idproveedor = proveedor.idproveedor
+              order by pago.fecha DESC
+              limit ?,?
+            ');
+						$sth->bindValue(1, $start, PDO::PARAM_INT);
+						$sth->bindValue(2, $limit, PDO::PARAM_INT);
+						$sth->execute();
+						$countsth = $DBH->query('SELECT COUNT(*) AS total FROM pago');
+					} catch(PDOException $e){
+						echo $e->getMessage();
+						die("<br /><b>Application Terminated. $nya->$act</b>");
+					}
+					$count = $countsth->fetch();
+					$count = $count['total'];
+				}
+				$result = stripslashes_deep($sth->fetchAll());
+				//$result =$sth->fetchAll();
+        //print_r($result);
+      break;
+			case 'search':
+				if(getGETPOST('term')!="") 
+					$autocomplete = getGETPOST('term');
+				else
+					die("No data received.");
+				$data = array("%".$autocomplete."%","%".$autocomplete."%","%".$autocomplete."%","%".$autocomplete."%","%".$autocomplete."%","%".$autocomplete."%","%".$autocomplete."%","%".$autocomplete."%","%".$autocomplete."%");
+				try {
+					$sth = $DBH->prepare('
+              select idtransaccion AS value, 
+              CONCAT(fecha," ",
+                    COALESCE(cliente.nombre,empleado.nombre,proveedor.nombre)," ",
+                    COALESCE(cliente.ap,empleado.ap)," ",
+                    concepto
+                    ) AS label from pago
+              left join cliente on pago.nocuenta = cliente.nocuenta
+              left join empleado on pago.idempleado = empleado.idempleado
+              left join proveedor on pago.idproveedor = proveedor.idproveedor
+              where fecha like ? 
+              or (cliente.nombre like ? or cliente.ap like ? or cliente.am like ? )
+              or (empleado.nombre like ? or empleado.ap like ? or empleado.am like ? )
+              or (proveedor.nombre like ?)
+              or concepto like ?
+              order by pago.fecha DESC
+              LIMIT 15;'); 
+          /*SELECT idtransaccion AS value, fecha AS label FROM pago WHERE fecha LIKE ? OR fecha like ? or fecha like ? LIMIT 15');*/
+					$sth->execute($data);
+				} catch(PDOException $e){
+					echo $e->getMessage();
+					die("<br /><b>Application Terminated. $nya->$act</b>");
+				}
+				$result = stripslashes_deep($sth->fetchAll());
+				die(json_encode($result));
+			break;
+			case 'update':
+				if(getGETPOST('id')!="" ) 
+					$id = getGETPOST('id'); 
+				else 
+					die("No valid ID specified.");
+				$name   = getGETPOST('name');
+				$ap     = getGETPOST('ap');
+				$am     = getGETPOST('am');
+				$hiredt	= getGETPOST('hiredt');
+				$type   = getGETPOST('type');
+				$data = array($name,$ap,$am,$hiredt,$type,$id);
+				try {
+					$sth = $DBH->prepare('UPDATE empleado SET Nombre=?,ap=?,am=?,fechacontratacion=?,tipo=? WHERE idempleado=?');
+					$sth->execute($data);
+				} catch(PDOException $e){
+					echo $e->getMessage();
+					die("<br /><b>Application Terminated. $nya->$act</b>");
+				}
+				echo "<br /><b>Sucessfully updated client.</b>";
+			break;
+    }
+  break;
+  case 'provider':
+    switch($act){
+      case 'add':
+				$name   = getGETPOST('name');
+				$address   = getGETPOST('address');
+        $phone   = getGETPOST('phone');
+        $data = array($name,$address,$phone);
+        try {
+          $DBH->beginTransaction();
+          $sth = $DBH->prepare('INSERT INTO proveedor (nombre,direccion,telefono) VALUES(?,?,?)');
+          $sth->execute($data);
+          $lastClientId = $DBH->lastInsertId();
+          $DBH->commit();
+        } catch(PDOException $e){
+          echo $e->getMessage();
+          $DBH->rollBack();
+          print_r($data);
+          echo("<br /><b>Application Terminated, transaction rolled back. $nya->$act</b><script type='text/javascript'>var lastClient=0;</script>");
+        }
+        echo "<br /><b>Sucessfully added provider.</b> <script type='text/javascript'>var lastClient=$lastClientId;</script>";
+      break;
+      case 'view':
+				if(getGETPOST('id')!='') {
+					try {
+						$data=array(getGETPOST('id'));
+						$sth = $DBH->prepare('
+              SELECT * from proveedor
+              where idproveedor = ?
+            ');
+						$sth->execute($data);
+					} catch(PDOException $e){
+						echo $e->getMessage();
+						die("<br /><b>Application Terminated. $nya->$act</b>");
+					}
+				} else {
+					if(getGETPOST('max_result')!="")
+						$limit = (int)getGETPOST('max_result');
+					else
+						$limit = 10;
+					if(getGETPOST('start')!="")
+						$start = (int)getGETPOST('start');
+					else
+						$start = 0;
+					try {
+						$sth = $DBH->prepare('
+              select * from proveedor
+              limit ?,?
+            ');
+						$sth->bindValue(1, $start, PDO::PARAM_INT);
+						$sth->bindValue(2, $limit, PDO::PARAM_INT);
+						$sth->execute();
+						$countsth = $DBH->query('SELECT COUNT(*) AS total FROM proveedor');
+					} catch(PDOException $e){
+						echo $e->getMessage();
+						die("<br /><b>Application Terminated. $nya->$act</b>");
+					}
+					$count = $countsth->fetch();
+					$count = $count['total'];
+				}
+				$result = stripslashes_deep($sth->fetchAll());
+				//$result =$sth->fetchAll();
+        //print_r($result);
+      break;
+			case 'search':
+				if(getGETPOST('term')!="") 
+					$autocomplete = getGETPOST('term');
+				else
+					die("No data received.");
+				$data = array("%".$autocomplete."%","%".$autocomplete."%","%".$autocomplete."%");
+				try {
+					$sth = $DBH->prepare('
+              select idproveedor AS value, nombre AS label 
+              from proveedor
+              where nombre like ? or telefono like ? or direccion like ?
+              order by idproveedor DESC
+              LIMIT 15;'); 
+					$sth->execute($data);
+				} catch(PDOException $e){
+					echo $e->getMessage();
+					die("<br /><b>Application Terminated. $nya->$act</b>");
+				}
+				$result = stripslashes_deep($sth->fetchAll());
+				die(json_encode($result));
+			break;
+			case 'update':
+				if(getGETPOST('id')!="" ) 
+					$id = getGETPOST('id'); 
+				else 
+					die("No valid ID specified.");
+				$name   = getGETPOST('name');
+				$ap     = getGETPOST('ap');
+				$am     = getGETPOST('am');
+				$hiredt	= getGETPOST('hiredt');
+				$type   = getGETPOST('type');
+				$data = array($name,$ap,$am,$hiredt,$type,$id);
+				try {
+					$sth = $DBH->prepare('UPDATE empleado SET Nombre=?,ap=?,am=?,fechacontratacion=?,tipo=? WHERE idempleado=?');
+					$sth->execute($data);
+				} catch(PDOException $e){
+					echo $e->getMessage();
+					die("<br /><b>Application Terminated. $nya->$act</b>");
+				}
+				echo "<br /><b>Sucessfully updated client.</b>";
+			break;
+    }
+  break;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	case 'stock':
-		// if(isset($_GET['data']))
-			// $data = $_GET['data'];
-		// if($data == 'meow'){
 			try {
 				$sth = $DBH->query('SELECT * FROM types');
 			} catch(PDOException $e){

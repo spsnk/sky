@@ -69,18 +69,64 @@
         }
     	});
     	$('[type=text]').keydown(checkForEnter);
+      $('#buscador').autocomplete({
+        source: "../core/query.php?nya=employee&act=search",
+        minLength: 2,
+        focus: function( event, ui ) {
+          $( "#buscador" ).val( ui.item.label );
+          $( "#id" ).val( ui.item.value );
+          return false;
+        },
+        select: function( event, ui ) {
+          $( "#buscador" ).val( ui.item.label );
+          $( "#id" ).val( ui.item.value );
+          return false;
+        }
+      });
+      $('#origin').change(function(){
+        $( "#buscador" ).removeAttr("disabled");
+        switch(this.value){
+          case 'e':
+            $( "#buscador" ).autocomplete('option', 'source', "../core/query.php?nya=employee&act=search");
+            $( "#buscador" ).attr("placeholder","Buscar empleado");
+          break;
+          case 'c':
+            $( "#buscador" ).autocomplete('option', 'source', "../core/query.php?nya=client&act=search");
+            $( "#buscador" ).attr("placeholder","Buscar cliente");
+          break;
+          case 'p':
+            $( "#buscador" ).autocomplete('option', 'source', "../core/query.php?nya=provider&act=search");
+            $( "#buscador" ).attr("placeholder","Buscar proveedor");
+          break;
+        }
+      });
     </script>
     <form id="payment" action="../core/query.php" method="post" enctype="multipart/form-data"> 
         <input type="hidden" name="nya" value="payment" />
         <input type="hidden" name="act" value="add" />
     	<div style="float:left; ">
-    		<input type="text" name="name" id="name" placeholder="Nombre" required autocomplete="off" tabindex="1" /> <br />
-    		<input type="text" name="desc" id="desc" placeholder="Descripcion" required autocomplete="off" tabindex="2"/> <br />  <br />
+    		<select name="concept1" id="concept1" required autocomplete="off" tabindex="1">
+          <option value disabled selected >Concepto</option>
+          <option value="pago">Pago</option>
+          <option value="cobro">Cobro</option>
+        </select> <br />
+    		<input type="text" name="concept2" id="concept2" placeholder="Descripción concepto" required autocomplete="off" tabindex="2" /> <br />
+    		<input type="text" name="cost" id="cost" placeholder="Monto" required autocomplete="off" tabindex="3"/> <br />  <br />
         <input type="submit" name="payment" class="boton" value="Agregar Pago" id="submit" tabindex="11" /> 
     	</div>
       <div style="float:left;">
-        <label for="img" >Logotipo</label> <br />
-        <input type="file" name="img" id="img" accept="image/*" tabindex="10" onchange="javascript: readURL(this);" /> <br />
+        <input type="datetime-local" name="date" id="date" tabindex="4" /> <br />
+      <select name="origin" id="origin" required autocomplete="off" tabindex="5">
+        <option value disabled selected >Origen/Destino</option>
+        <option value="e">Empleado</option>
+        <option value="c">Cliente</option>
+        <option value="p">Proveedor</option>
+      </select> <br />
+      <input type="text" id="buscador" disabled required placeholder="Buscar" tabindex="6" style="width:200px;" />
+      <input type="hidden" name="id" id="id" required placeholder="Buscar" />
       </div>
-      <img title="Previsualizacion" style="float:left;" id="preview" class="hide" height=100 /><br/>
     </form>
+    
+    <script>
+      document.getElementById('date').value = new Date().toJSON().slice(0,19);
+    </script>
