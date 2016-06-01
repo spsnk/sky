@@ -18,9 +18,9 @@ $("#rep").validate({
 					beforeSubmit: function(arr, $form, options) { 
 						$('#submit').attr('disabled','disabled');
 					},
-					target: '#query',
+					target: '#debug',
 					success:    function() { 
-						//$('#query').load("ui/payment-view.php","nya=payment&act=view&id="+$(form).parent().attr("id"));
+						$('#query').load("ui/report-view.php","nya=report&act=view");
 					}
 				});
 			}

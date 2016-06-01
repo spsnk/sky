@@ -79,7 +79,7 @@ include '../../core/query.php';
   });
     </script>
 <div id="payment-view-nav">
-	<input type="text" style="width:500px;" value="<?php if(isset($_GET['loli'])) echo $_GET['loli']; else echo "";?>" id="buscador" placeholder="Buscar" />
+	<input type="text" style="width:200px;" value="<?php if(isset($_GET['loli'])) echo $_GET['loli']; else echo "";?>" id="buscador" placeholder="Buscar" />
 	<input type="hidden" id="result" disabled="disabled"/>
 	<!--Total de clientes: <?php echo $count; ?>-->&nbsp;&nbsp;&nbsp;
 	<div id="pages" style="display:inline-block;">
@@ -111,64 +111,14 @@ include '../../core/query.php';
 	</div>
 </div>
 <div id="results">
-	<?php 
-	foreach($result as $key => $arr) { ?>
-	<div class="payment display" id="<?php echo $arr['idtransaccion']; ?>">
-		<p style="line-height:80%;">&nbsp;</p>
-		<form id="update<?php echo $key;?>" action="../core/query.php" method="post">
-			<input type="hidden" name="nya" value="payment" />
-			<input type="hidden" name="act" value="update" />
-			<input type="hidden" name="id" value=<?php echo $arr['idtransaccion']; ?> />
-			<a title="Concepto" id="name">
-				<div class="flechita"></div> 
-				<?php echo $arr['concepto']; ?>
-			</a>
-			<input type="text" name="name" value="<?echo htmlspecialchars($arr['concepto']);?>" class="hide" maxlength="40" id="name"/><br />
-			<a title="Monto" id="desc">
-				<div class="flechita"></div> 
-				$<?php echo $arr['monto']; ?>
-			</a>
-			<input type="text" name="desc" value="<?echo htmlspecialchars($arr['monto']);?>" class="hide" maxlength="40" id="desc"/><br />
-			<a title="Fecha de transaccion" id="date">
-				<div class="flechita"></div> 
-				<?php echo $arr['fecha']; ?>
-			</a>
-      <input class="hide" type="datetime-local" name="date" id="date" tabindex="4" />
-      <br />
-      <script>
-       $('#update<?php echo $key;?> input#date').val(new Date("<?echo $arr['fecha'];?>").toJSON().slice(0,19));
-      </script>
-			<a title="Origen" id="date">
-				<div class="flechita"></div> 
-				<?php if($arr['idempleado']!=""){ echo "Empleado"; $type = "e"; }
-              else if($arr['nocuenta']!="") { echo "Cliente"; $type = "c"; }
-              else if($arr['idproveedor']!="") { echo "Proveedor"; $type = "p"; } ?>
-			</a><br/>
-			<a title="Origen" id="date">
-				<div class="flechita"></div> 
-				<?php switch($type){
-          case 'e':
-            echo $arr['ena']." ".$arr['eap']." ".$arr['eam'];
-          break;
-          case 'c':
-            echo $arr['cna']." ".$arr['cap']." ".$arr['cam'];
-          break;
-          case 'p':
-            echo $arr['pna'];
-          break;
-        }?>
-			</a>
-      <select class="hide" name="origin" id="origin" required autocomplete="off" tabindex="5">
-        <option value disabled>Origen/Destino</option>
-        <option value="e" <? if($arr['idempleado']!="") echo "selected"; ?>>Empleado</option>
-        <option value="c" <? if($arr['nocuenta']!="") echo "selected"; ?>>Cliente</option>
-        <option value="p" <? if($arr['idproveedor']!="") echo "selected"; ?>>Proveedor</option>
-      </select> <br />
-      <input type="text" class="hide" id="busca" required placeholder="Buscar" tabindex="6" style="width:200px;" />
-      <input type="hidden" id="id" required placeholder="Buscar" />
-			<input type="submit" class="hide boton" value="Actualizar" id="submit"/> 
-			<button type="button" class="hide boton">Cancelar</button>
-		</form>
-	</div>
-	<? } ?><br>
+  <?foreach ($result as $key => $a){?>
+    <a title="Fecha" id="date">
+      <div class="flechita"></div> 
+      <? echo $a['fecha']; ?>
+    </a><br/>
+    <a title="Origen" id="date">
+      <div class="flechita"></div> 
+      <? echo $a['cna']." ".$a['cap']." ".$a['cam']; ?>
+    </a><br/>
+  <? } ?>
 </div>

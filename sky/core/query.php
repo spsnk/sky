@@ -1029,7 +1029,7 @@ switch($nya){
         }
 				$result = stripslashes_deep($sth->fetchAll());
 				//$result =$sth->fetchAll();
-        print_r($result);
+        //print_r($result); 
       break;
     }
   break;
