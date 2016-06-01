@@ -50,6 +50,9 @@
 				<a href="ui/payment.php" class="ajax">
 				<div class="flechita"></div>
 				Pagos </a>
+				<a href="ui/report.php" class="ajax">
+				<div class="flechita"></div>
+				Reportes </a>
 			</div>
 			<div id="devmenu">
 				<a onclick="$('#ajax').html('');">CLS</a><br>

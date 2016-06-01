@@ -104,7 +104,7 @@
         <div id="admon" style="display:none;">
           <input type="text" name="salary" id="salary" placeholder="Salario" tabindex="6" /> <br />
           <input type="text" name="hours" id="hours" placeholder="Horas" tabindex="7" /> <br />
-          <input type="text" name="pass" id="pass" placeholder="Password" autocomplete="off" tabindex="8" /> <br />
+          <input type="password" name="pass" id="pass" placeholder="Password" autocomplete="off" tabindex="8" /> <br />
         </div>
       </div>
       <div style="float:left;">

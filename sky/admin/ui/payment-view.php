@@ -79,7 +79,7 @@ include '../../core/query.php';
   });
     </script>
 <div id="payment-view-nav">
-	<input type="text" value="<?php if(isset($_GET['loli'])) echo $_GET['loli']; else echo "";?>" id="buscador" placeholder="Buscar" />
+	<input type="text" style="width:500px;" value="<?php if(isset($_GET['loli'])) echo $_GET['loli']; else echo "";?>" id="buscador" placeholder="Buscar" />
 	<input type="hidden" id="result" disabled="disabled"/>
 	<!--Total de clientes: <?php echo $count; ?>-->&nbsp;&nbsp;&nbsp;
 	<div id="pages" style="display:inline-block;">

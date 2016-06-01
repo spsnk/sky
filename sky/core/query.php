@@ -397,7 +397,7 @@ switch($nya){
   break;
   case 'package':
 			try {
-				$sth = $DBH->query('SELECT idcanal, nombre, logo FROM canal');
+				$sth = $DBH->query('SELECT idcanal, nombre, logo FROM canal order by nombre');
 			} catch(PDOException $e){
 				echo $e->getMessage();
 				die("<br/><b>Application Terminated. $nya->$act</b>");
@@ -472,6 +472,30 @@ switch($nya){
 				//print_r($_POST);
 				//var_dump($_POST);
 			break;
+			case 'search':
+				if(getGETPOST('term')!="") 
+					$autocomplete = getGETPOST('term');
+				else
+					die("No data received.");
+				$data = array("%".$autocomplete."%","%".$autocomplete."%");
+				try {
+					$sth = $DBH->prepare('
+          SELECT paquete.idpaquete AS value, paquete.nombre AS label 
+          FROM paquete 
+          left join canalpaquete on paquete.idpaquete=canalpaquete.idpaquete
+          left join canal on canalpaquete.idcanal = canal.idcanal
+          WHERE paquete.nombre LIKE ? 
+          OR canal.nombre like ?
+          group by paquete.idpaquete
+          LIMIT 15');
+					$sth->execute($data);
+				} catch(PDOException $e){
+					echo $e->getMessage();
+					die("<br /><b>Application Terminated. $nya->$act</b>");
+				}
+				$result = stripslashes_deep($sth->fetchAll());
+				die(json_encode($result));
+			break;
       }
   break;
   case 'equipment':
@@ -541,22 +565,17 @@ switch($nya){
 				$phone  = getGETPOST('phone');
 				$pass 	= getGETPOST('pass');
 				
-				echo"</br>Data Received for client: <br />Name: $name <br />Address: $address <br />Phone: $phone <br /> ";
-				if($address == "" || $address == "Dirección")
-					$address = NULL;
-				if($phone == "" || strpos($phone,"_") !== false )
-					$phone = NULL;
+				//echo"</br>Data Received for client: <br />Name: $name <br />Address: $address <br />Phone: $phone <br /> ";
 				$data = array($name,$ap,$am,$phone,$street,$colony,$cp,$bhda,$pass);
 				try {
-					$sth = $DBH->prepare('INSERT INTO cliente (Nombre,ap,am,Telefono,Calle,Colonia,CP,fechaNacimiento,password) VALUES(?,?,?,?,?,?,?,?,?); SELECT LAST_INSERT_ID() as last');
+					$sth = $DBH->prepare('INSERT INTO cliente (Nombre,ap,am,Telefono,Calle,Colonia,CP,fechaNacimiento,password) VALUES(?,?,?,?,?,?,?,?,?)');
 					$sth->execute($data);
-					$lastClientId = $sth->fetch();
-					$lastClientId = $lastClientId['last'];
+					$lastId = $DBH->lastInsertId();
 				} catch(PDOException $e){
 					echo $e->getMessage();
 					die("<br /><b>Application Terminated. $nya->$act</b>");
 				}
-				echo "<br /><b>Sucessfully added client.</b> <script type='text/javascript'>var lastClient=$lastClientId;</script>";
+				echo "<br /><b>Sucessfully added client.</b> <script type='text/javascript'>var lastClient=$lastId;</script>";
 			break;
 			case 'view':
 				if(getGETPOST('id')!="") {
@@ -605,6 +624,7 @@ switch($nya){
           WHERE nombre LIKE ? 
           OR ap like ?
           or am like ?
+          group by nocuenta
           LIMIT 15');
 					$sth->execute($data);
 				} catch(PDOException $e){
@@ -619,20 +639,23 @@ switch($nya){
 					$id = getGETPOST('id'); 
 				else 
 					die("No valid ID specified.");
-				if(getGETPOST('name')!="") 
-					$name = getGETPOST('name'); 
-				if(getGETPOST('phone')!="" || strpos(getGETPOST('phone'),"_") !== false) 
-					$phone = getGETPOST('phone'); 
-				else 
+        
+				$name   = getGETPOST('name');
+				$ap     = getGETPOST('ap');
+				$am     = getGETPOST('am');
+				$street = getGETPOST('street');
+				$colony = getGETPOST('colony');
+				$cp 	= getGETPOST('cp');
+				$bhda	= getGETPOST('bhda');
+				$phone  = getGETPOST('phone');
+				$pass 	= getGETPOST('pass');
+				
+				//echo"</br>Data Received for client: <br />Name: $name <br />Address: $address <br />Phone: $phone <br /> ";
+				if($phone == "" || strpos($phone,"_") !== false )
 					$phone = NULL;
-				echo"</br>Data Received for update: <br />ID: $id <br />Name: $name <br />Address: $address <br />Phone: $phone <br /> ";
-				// if($address == "" || $address == "Dirección")
-					// $address = NULL;
-				// if($phone == "" || strpos($phone,"_") !== false )
-					// $phone = NULL;
-				$data = array($name,$address,$phone,$id);
+				$data = array($name,$ap,$am,$phone,$street,$colony,$cp,$bhda,$pass,$id);
 				try {
-					$sth = $DBH->prepare('UPDATE client SET Nombre=?,ap=?,am=?,Telefono=?,Calle=?,Colonia=?,CP=?,fechaNacimiento=?,password=? WHERE id=?');
+					$sth = $DBH->prepare('UPDATE cliente SET Nombre=?,ap=?,am=?,Telefono=?,Calle=?,Colonia=?,CP=?,fechaNacimiento=?,password=? WHERE nocuenta=?');
 					$sth->execute($data);
 				} catch(PDOException $e){
 					echo $e->getMessage();
@@ -656,14 +679,14 @@ switch($nya){
 						$data=array(getGETPOST('id'));
 						$sth = $DBH->prepare('SELECT * FROM cliente WHERE nocuenta=?');
 						$sth->execute($data);
-            $result = stripslashes_deep($sth->fetchAll());
+            $result = stripslashes_deep($sth->fetch());
             
             $sth = $DBH->prepare('
               SELECT * 
               from pago
               where nocuenta = ?
               order by fecha desc
-              limit 1;
+              limit 10;
             ');
             $sth->execute($data);
             $pago = stripslashes_deep($sth->fetchAll());
@@ -682,11 +705,44 @@ switch($nya){
             ');
             $sth->execute($data);
             $paquete = stripslashes_deep($sth->fetchAll());
-            print_r($result);
-            print_r($pago);
-            print_r($paquete);
 					} catch(PDOException $e){
 						echo $e->getMessage();
+						die("<br /><b>Application Terminated. $nya->$act</b>");
+					}
+				}else{
+          die("error, no data");
+        }
+			break;
+			case 'pak':
+				if(getGETPOST('id')!="") {
+					try {
+            $DBH->beginTransaction();
+						$id=getGETPOST('id');
+            $pakid=getGETPOST('pakid');
+            $subdt=getGETPOST('subdt');
+            
+            $sth = $DBH->prepare('
+            SELECT idequipo FROM equipo
+            WHERE idequipo NOT IN (SELECT dopaquete.idequipo FROM dopaquete) 
+            Limit 1
+            ');
+						$sth->execute();
+            $idequipo = $sth->fetch();
+            $idequipo['hi']="hello";
+            $data=array($id,$pakid,$subdt,$idequipo['idequipo']);
+            echo "Received <br>";
+            print_r($data);
+            
+						$sth = $DBH->prepare('
+            insert into dopaquete (nocuenta,idpaquete,fechasubscripcion,idequipo)
+            values (?,?,?,?) ');
+						$sth->execute($data);
+            //$result = stripslashes_deep($sth->fetch());
+            $DBH->commit();
+            //print_r($result);
+					} catch(PDOException $e){
+						echo $e->getMessage();
+            $DBH->rollBack();
 						die("<br /><b>Application Terminated. $nya->$act</b>");
 					}
 				}else{
@@ -798,8 +854,7 @@ switch($nya){
 					$sth = $DBH->prepare('
               select idtransaccion AS value, 
               CONCAT(fecha," ",
-                    COALESCE(cliente.nombre,empleado.nombre,proveedor.nombre)," ",
-                    COALESCE(cliente.ap,empleado.ap)," ",
+                    COALESCE(CONCAT(cliente.nombre," ",cliente.ap),CONCAT(empleado.nombre," ",empleado.ap),proveedor.nombre)," ",
                     concepto
                     ) AS label from pago
               left join cliente on pago.nocuenta = cliente.nocuenta
@@ -947,6 +1002,35 @@ switch($nya){
 				}
 				echo "<br /><b>Sucessfully updated client.</b>";
 			break;
+    }
+  break;
+  case 'report':
+    switch($act){
+      case 'view':
+        //echo getGETPOST('date');
+        try {
+          $data=array("%".getGETPOST('date')."%");
+          $sth = $DBH->prepare('
+            select pago.*,
+            cliente.nombre as cna, cliente.ap as cap, cliente.am as cam,
+            empleado.nombre as ena, empleado.ap as eap, empleado.am as eam,
+            proveedor.nombre as pna
+            from pago
+            left join cliente on pago.nocuenta = cliente.nocuenta
+            left join empleado on pago.idempleado = empleado.idempleado
+            left join proveedor on pago.idproveedor = proveedor.idproveedor
+            where pago.fecha like ?
+            group by pago.idtransaccion; 
+          ');
+          $sth->execute($data);
+        } catch(PDOException $e){
+          echo $e->getMessage();
+          die("<br /><b>Application Terminated. $nya->$act</b>");
+        }
+				$result = stripslashes_deep($sth->fetchAll());
+				//$result =$sth->fetchAll();
+        print_r($result);
+      break;
     }
   break;
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

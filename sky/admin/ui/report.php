@@ -1,7 +1,4 @@
 <?php
-// if(isset($_GET['nya'])) 
-	// $nya = $_GET['nya'];
-// else
 $nya='report';
 if(isset($_GET['act'])) 
 	$act=$_GET['act'];
@@ -9,27 +6,34 @@ else
 	$act='view';
 if(isset($_GET['id'])) 
 	$id=$_GET['id'];
-else
+else 
 	$id="";
-//echo "$nya $act<br><br>";
 ?>
 <script type="text/javascript">
 rawr();
-$("#query").load("ui/<?php echo "$nya-$act.php"; ?>","nya=<? echo $nya; ?>&act=<? echo $act; ?>&id=<? echo $id; ?>&max_result=10");
+//$("#query").load("ui/<?php echo "$nya-$act.php"; ?>","nya=<? echo $nya; ?>&act=<? echo $act; ?>&id=<? echo $id; ?>&max_result=10");
+$("#rep").validate({
+			submitHandler: function(form) {
+				$(form).ajaxSubmit({
+					beforeSubmit: function(arr, $form, options) { 
+						$('#submit').attr('disabled','disabled');
+					},
+					target: '#query',
+					success:    function() { 
+						//$('#query').load("ui/payment-view.php","nya=payment&act=view&id="+$(form).parent().attr("id"));
+					}
+				});
+			}
+		});
 </script>
 <h1>Reportes</h1>
-<div id="report-nav">
-	<a href="ui/order-view.php" id="nya=order&amp;act=view&amp;max_result=10" class="query">Todos los Pedidos</a>
-	<a href="ui/stock-add.php" id="nya=stock&amp;" class="query">Agregar</a>
-	<!--<a  href="../core/query.php" class="query" id="nya=client&amp;act=modify">Modificar</a>
-	<a  href="../core/query.php" class="query" id="nya=client&amp;act=delete">Eliminar</a>-->
-</div>
-<div id="buscanav" style="float:left;margin-bottom:-1px;">
-	<div id="basic">
-		<input type="text" value="<?php if(isset($_GET['loli'])) echo $_GET['loli']; else echo "Buscar"; ?>" id="buscador" />
-		<input type="hidden" id="result" disabled="disabled"/>
-	</div>
-	<div id="adv">
-	</div>
+<div id="report-nav" class="nav">
+  <form id="rep" action="../core/query.php" method="post">
+    <input type="hidden" name="nya" value="report" />
+    <input type="hidden" name="act" value="view" />
+    <label for="date"><b>Selecciona fecha</b></label><br/>
+    <input type="month" name="date" id="date" required><br/>
+    <input type="submit" value="Mostrar" class="boton" />
+  </form>
 </div>
 <div id="query"></div>
