@@ -1007,9 +1007,10 @@ switch($nya){
   case 'report':
     switch($act){
       case 'view':
-        //echo getGETPOST('date');
         try {
-          $data=array("%".getGETPOST('date')."%");
+          $fecha=getGETPOST('date');
+          $data=array($fecha."%");
+          //echo $fecha."fecha";
           $sth = $DBH->prepare('
             select pago.*,
             cliente.nombre as cna, cliente.ap as cap, cliente.am as cam,
@@ -1019,15 +1020,16 @@ switch($nya){
             left join cliente on pago.nocuenta = cliente.nocuenta
             left join empleado on pago.idempleado = empleado.idempleado
             left join proveedor on pago.idproveedor = proveedor.idproveedor
-            where pago.fecha like ?
-            group by pago.idtransaccion; 
+            where pago.fecha like(?)
+            group by pago.idtransaccion
+            order by pago.fecha asc;
           ');
           $sth->execute($data);
         } catch(PDOException $e){
           echo $e->getMessage();
           die("<br /><b>Application Terminated. $nya->$act</b>");
         }
-				$result = stripslashes_deep($sth->fetchAll());
+				$result = $sth->fetchAll();
 				//$result =$sth->fetchAll();
         //print_r($result); 
       break;
