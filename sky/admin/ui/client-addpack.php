@@ -21,12 +21,6 @@ $(document).ready(function(){
       clickclient($('#result').val());
 			return false;
 		}
-	}).focus(function(){
-		$(this).css('color','#2d2d2d');
-		$(this).val("");
-	}).blur(function(){
-		$(this).css('color','#aaa');
-		$(this).val("Buscar");
 	});
 });
 function clientesearch(result,text,act) {
@@ -122,7 +116,53 @@ $('#buscapak').autocomplete({
     return false;
   }
 });
+$('#buscaser').autocomplete({
+  source: "../core/query.php?nya=service&act=search",
+  minLength: 2,
+  focus: function( event, ui ) {
+    $( "#buscaser" ).val( ui.item.label );
+    $( "#serid" ).val( ui.item.value );
+    return false;
+  },
+  select: function( event, ui ) {
+    $( "#buscaser" ).val( ui.item.label );
+    $( "#serid" ).val( ui.item.value );
+    //lolisearch($('#pakid'),$(this),"client");
+    //clickclient(<?echo $result['nocuenta'];?>);
+    return false;
+  }
+});
+$('#buscatec').autocomplete({
+  source: "../core/query.php?nya=employee&act=tecsearch",
+  minLength: 2,
+  focus: function( event, ui ) {
+    $( "#buscatec" ).val( ui.item.label );
+    $( "#tecid" ).val( ui.item.value );
+    return false;
+  },
+  select: function( event, ui ) {
+    $( "#buscatec" ).val( ui.item.label );
+    $( "#tecid" ).val( ui.item.value );
+    //lolisearch($('#pakid'),$(this),"client");
+    //clickclient(<?echo $result['nocuenta'];?>);
+    return false;
+  }
+});
   $("#pak").validate({
+    submitHandler: function(form) {
+      $(form).ajaxSubmit({
+        beforeSubmit: function(arr, $form, options) { 
+          $('#submit').attr('disabled','disabled');
+        },
+        target: '#debug',
+        success:    function() { 
+          //$('#query').load("ui/client-addpack.php","nya=client&act=details&id="+$(form).parent().attr("id"));
+          clickclient(<?echo $result['nocuenta'];?>);
+        }
+      });
+    }
+  });
+  $("#ser").validate({
     submitHandler: function(form) {
       $(form).ajaxSubmit({
         beforeSubmit: function(arr, $form, options) { 
@@ -138,7 +178,7 @@ $('#buscapak').autocomplete({
   });
 </script>
 <div id="client-view-nav">
-	<input type="text" value="<?php if(isset($_GET['loli'])) echo $_GET['loli']; else echo "Buscar";?>" id="buscador" />
+	<input type="text" value="<?php if(isset($_GET['loli'])) echo $_GET['loli'];?>" placeholder="Buscar" id="buscador" />
 	<input type="hidden" id="result" disabled="disabled"/>
 </div>
 <div id="results">
@@ -169,11 +209,14 @@ $('#buscapak').autocomplete({
         <a title="Codigo postal" id="cp">
           <div class="flechita"></div> 
           <?php echo $arr['cp'];?>
-        </a><br />
+        </a>
+        <input type="text" name="cp" value="<?echo htmlspecialchars($arr['cp']);?>" class="hide" maxlength="40" id="cp"/><br />
         <a title="Fecha de nacimiento" id="bhda">
           <div class="flechita"></div> 
           <?php echo $arr['fechanacimiento'];?>
-        </a><br />
+        </a>
+        <input type="text" name="bhda" value="<?echo htmlspecialchars($arr['fechanacimiento']);?>" required class="hide dateISO" maxlength="40" id="bdha"/>
+        <br />
         <a title="Teléfono" id="phone">
           <div class="flechita"></div> 
           <?php if($arr['telefono']!="") echo$arr['telefono']; else for($i=0;$i<20;$i++) echo "&nbsp"; ?>
@@ -185,7 +228,7 @@ $('#buscapak').autocomplete({
         <button type="button" class="hide boton">Cancelar</button>
       </form>
     </div>
-    <div class="display" style=" width:400px; float:left; margin: 10px;">
+    <div class="display" style=" width:250px; float:left; margin: 10px;">
       <p><b>Paquetes contratados</b></p><br/>
       <? foreach($paquete as $pkey => $parr) { ?>
         <div>
@@ -198,8 +241,16 @@ $('#buscapak').autocomplete({
         </div><br/>
       <? } ?>
     </div>
-    <br>
-    <div class="display" style="width:200px; clear:both; float:left; margin: 10px;">
+    <div class="display" style="width:200px; float:right;  margin: 10px;">
+      <p><b>Ultimos servicios</b></p><br/>
+      <? foreach($ser as $serkey => $serarr) { ?>
+        <p>Fecha: <? echo $serarr['fecha']; ?></p>
+        <p>Servicio: <? echo $serarr['nombre']; ?></p>
+        <p>Tecnico: <? echo $serarr['tecn']; ?></p>
+        <p>Costo: $<? echo $serarr['costo']; ?></p></br>
+      <? } ?>
+    </div>
+    <div class="display" style="width:200px; float:right; margin: 10px;">
       <p><b>Ultimos pagos</b></p><br/>
       <? foreach($pago as $pagokey => $pagoarr) { ?>
         <p>Fecha: <? echo $pagoarr['fecha']; ?></p>
@@ -207,7 +258,7 @@ $('#buscapak').autocomplete({
         <p>Concepto: <? echo $pagoarr['concepto']; ?></p></br>
       <? } ?>
     </div>
-    <div class="display" style="width:200px; float:left;  margin: 10px;">
+    <div class="display" style="width:200px; clear:left; float:left;   margin: 10px;">
       <p><b>Agregar paquete</b></p><br/>
       <form id="pak" action="../core/query.php" method="post">
           <input type="hidden" name="nya" value="client" />
@@ -220,6 +271,24 @@ $('#buscapak').autocomplete({
           <input type="submit" class="boton" value="Agregar paquete" id="submit"/> 
           <script>
             document.getElementById('subdt').value = new Date().toISOString().slice(0,10);
+          </script>
+      </form>
+    </div>
+    <div class="display" style="width:200px; float:left;  margin: 10px;">
+      <p><b>Agregar Servicio</b></p><br/>
+      <form id="ser" action="../core/query.php" method="post">
+          <input type="hidden" name="nya" value="client" />
+          <input type="hidden" name="act" value="ser" />
+          <input type="hidden" name="id" value=<?php echo $arr['nocuenta']; ?> />
+          <input type="text" required placeholder="Buscar servicio" value id="buscaser" autocomplete="off" /><br/>
+          <input type="hidden" name="serid" id="serid" value required />
+          <input type="text" required placeholder="Buscar tecnico" value id="buscatec" autocomplete="off" /><br/>
+          <input type="hidden" name="tecid" id="tecid" value required />
+          <label for="serdt">Fecha de servicio</label><br />
+          <input type="date" name="serdt" id="serdt" tabindex="9"  required/> <br />
+          <input type="submit" class="boton" value="Agregar paquete" id="submit"/> 
+          <script>
+            document.getElementById('serdt').value = new Date().toISOString().slice(0,10);
           </script>
       </form>
     </div>

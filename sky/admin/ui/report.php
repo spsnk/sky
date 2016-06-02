@@ -30,7 +30,7 @@ $("#rep").validate({
     <label for="date"><b>Selecciona fecha</b></label><br/>
     <input type="month" name="date" id="date" required><br/>
     <input type="submit" value="Mostrar" class="boton" />
-    <input type="button" value="Generar Reporte" class="boton" />
+    <input type="button" name="rep" value="Generar Reporte" class="boton" />
   </form>
 </div>
 <div id="query"></div>

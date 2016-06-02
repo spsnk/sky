@@ -177,6 +177,28 @@ switch($nya){
 				$result = stripslashes_deep($sth->fetchAll());
 				die(json_encode($result));
 			break;
+      //////////////
+			case 'tecsearch':
+				if(getGETPOST('term')!="") 
+					$autocomplete = getGETPOST('term');
+				else
+					die("No data received.");
+				$data = array("%".$autocomplete."%","%".$autocomplete."%","%".$autocomplete."%");
+				try {
+					$sth = $DBH->prepare('
+          SELECT tecnico.idempleado AS value, CONCAT(nombre," ",ap," ",am) AS label 
+          FROM empleado 
+          left join tecnico on empleado.idempleado=tecnico.idempleado
+          WHERE nombre LIKE ? OR ap like ? or am like ? 
+          LIMIT 20');
+					$sth->execute($data);
+				} catch(PDOException $e){
+					echo $e->getMessage();
+					die("<br /><b>Application Terminated. $nya->$act</b>");
+				}
+				$result = stripslashes_deep($sth->fetchAll());
+				die(json_encode($result));
+			break;
 			case 'update':
 				if(getGETPOST('id')!="" ) 
 					$id = getGETPOST('id'); 
@@ -393,6 +415,26 @@ switch($nya){
 				}
 				$result = stripslashes_deep($sth->fetchAll());
       break;
+			case 'search':
+				if(getGETPOST('term')!="") 
+					$autocomplete = getGETPOST('term');
+				else
+					die("No data received.");
+				$data = array("%".$autocomplete."%");
+				try {
+					$sth = $DBH->prepare('
+          SELECT idservicio AS value, nombre AS label 
+          FROM servicio 
+          WHERE nombre LIKE ? 
+          order by nombre');
+					$sth->execute($data);
+				} catch(PDOException $e){
+					echo $e->getMessage();
+					die("<br /><b>Application Terminated. $nya->$act</b>");
+				}
+				$result = stripslashes_deep($sth->fetchAll());
+				die(json_encode($result));
+			break;
     }
   break;
   case 'package':
@@ -692,6 +734,18 @@ switch($nya){
             $pago = stripslashes_deep($sth->fetchAll());
             
             $sth = $DBH->prepare('
+              SELECT servicio.nombre as nombre, doservicio.fechaservicio as fecha, concat(empleado.nombre," ",empleado.ap," ",empleado.am) as tecn, servicio.costo as costo
+              from doservicio
+              left join servicio on servicio.idservicio = doservicio.idservicio
+              left join empleado on empleado.idempleado = doservicio.idempleado
+              where nocuenta = ?
+              order by doservicio.fechaservicio desc
+              limit 10;
+            ');
+            $sth->execute($data);
+            $ser = stripslashes_deep($sth->fetchAll());
+            
+            $sth = $DBH->prepare('
               SELECT dopaquete.*,
                 paquete.nombre,
                 paquete.renta,
@@ -735,6 +789,35 @@ switch($nya){
             
 						$sth = $DBH->prepare('
             insert into dopaquete (nocuenta,idpaquete,fechasubscripcion,idequipo)
+            values (?,?,?,?) ');
+						$sth->execute($data);
+            //$result = stripslashes_deep($sth->fetch());
+            $DBH->commit();
+            //print_r($result);
+					} catch(PDOException $e){
+						echo $e->getMessage();
+            $DBH->rollBack();
+						die("<br /><b>Application Terminated. $nya->$act</b>");
+					}
+				}else{
+          die("error, no data");
+        }
+			break;
+			case 'ser':
+				if(getGETPOST('id')!="") {
+					try {
+            $DBH->beginTransaction();
+						$id=getGETPOST('id');
+            $serid=getGETPOST('serid');
+            $serdt=getGETPOST('serdt');
+            $tecid=getGETPOST('tecid');
+            
+            $data=array($id,$serid,$tecid,$serdt);
+            echo "Received <br>";
+            print_r($data);
+            
+						$sth = $DBH->prepare('
+            insert into doservicio (nocuenta,idservicio,idempleado,fechaservicio)
             values (?,?,?,?) ');
 						$sth->execute($data);
             //$result = stripslashes_deep($sth->fetch());
