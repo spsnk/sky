@@ -14,19 +14,19 @@
         <!-- Wrapper for slides -->
         <div class="carousel-inner">
             <div class="item active">
-                <div class="fill" style="background-image:url('./sky/mejor.png' );width:700px; margin:auto;"></div>
+                <div class="fill" style="background-image:url('./sky/mejor.png' );width:1000px; margin:auto;"></div>
                 <div class="carousel-caption" >
                    
                 </div>
             </div>
             <div class="item">
-                <div class="fill" style="background-image:url('./sky/nuevo.png' );width:900px; margin:auto;"></div>
+                <div class="fill" style="background-image:url('./sky/nuevo.png' ); margin:auto;"></div>
                 <div class="carousel-caption" >
                     
                 </div>
             </div>
             <div class="item">
-                <div class="fill" style="background-image:url('./sky/diver.png');width:11ss00px; margin:auto;"></div>
+                <div class="fill" style="background-image:url('./sky/diver.png'); margin:auto;"></div>
                 <div class="carousel-caption" >
                    
                 </div>
@@ -104,34 +104,34 @@
                 <img src="./sky/paquete.jpg">
             </div>
             <div class="col-md-4 col-sm-6">
-                <a href="portfolio-item.html">
-                    <img class="img-responsive img-portfolio img-hover" src="./sky/residencias.png"  style="height: 450px; width: 700px;" alt="">
-                </a>
+                
+                    <img class="img-responsive img-portfolio img-hover" src="./sky/residencias.png"  style="height: 350px; width: 700px;" alt="">
+                
             </div>
             <div class="col-md-4 col-sm-6">
-                <a href="portfolio-item.html">
-                    <img class="img-responsive img-portfolio img-hover" src="./sky/bares.png" style="height: 450px; width: 700px;"alt="">
-                </a>
+                
+                    <img class="img-responsive img-portfolio img-hover" src="./sky/bares.png" style="height: 350px; width: 700px;"alt="">
+                
             </div>
             <div class="col-md-4 col-sm-6">
-                <a href="portfolio-item.html">
-                    <img class="img-responsive img-portfolio img-hover" src="./sky/hoteles.png" style="height: 450px; width: 700px;"alt="">
-                </a>
+                
+                    <img class="img-responsive img-portfolio img-hover" src="./sky/hoteles.png" style="height: 350px; width: 700px;"alt="">
+                
             </div>
             <div class="col-md-4 col-sm-6">
-                <a href="portfolio-item.html">
-                    <img class="img-responsive img-portfolio img-hover" src="./sky/destacados.png" style="height: 450px; width: 700px;" alt="">
-                </a>
+                
+                    <img class="img-responsive img-portfolio img-hover" src="./sky/destacados.png" style="height: 350px; width: 700px;" alt="">
+                
             </div>
             <div class="col-md-4 col-sm-6">
-                <a href="portfolio-item.html">
-                    <img class="img-responsive img-portfolio img-hover" src="./sky/nba-embajada.jpg"  style="height: 450px; width: 700px;" alt="">
-                </a>
+               
+                    <img class="img-responsive img-portfolio img-hover" src="./sky/nba-embajada.jpg"  style="height: 350px; width: 700px;" alt="">
+                
             </div>
             <div class="col-md-4 col-sm-6">
-                <a href="portfolio-item.html">
-                    <img class="img-responsive img-portfolio img-hover" src="./sky/skyview.jpg"   style="height: 450px; width: 700px;" alt="">
-                </a>
+               
+                    <img class="img-responsive img-portfolio img-hover" src="./sky/skyview.jpg"   style="height: 350px; width: 700px;" alt="">
+                
             </div>
         </div>
         <!-- /.row -->
@@ -143,7 +143,7 @@
         <footer>
             <div class="row">
                 <div class="col-lg-12">
-                    <p>Copyright &copy; 2016 | <a href="admin">Administración</a></p>
+                    <p>Copyright &copy; Bases de Datos 2016</p>
                 </div>
             </div>
         </footer>

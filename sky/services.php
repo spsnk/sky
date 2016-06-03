@@ -78,7 +78,7 @@
                     <div class="panel-body">
                         <h4>'.$value["Nombre"].'</h4>
                         <p>'.$value["Descripcion"].'</p>
-                        <a href="services.php#service-two" class="btn btn-primary">Saber mas</a>
+                       
                     
           
                     </div>
@@ -103,8 +103,7 @@
                     <div class="panel-body">
                         <h4>'.$value["Nombre"].'</h4>
                         <p>'.$value["Descripcion"].'</p>
-                        <a href="#" class="btn btn-primary">Saber mas</a>
-                    
+                       
           
                     </div>
                     </div>
@@ -128,7 +127,7 @@
                     <div class="panel-body">
                         <h4>'.$value["Nombre"].'</h4>
                         <p>'.$value["Descripcion"].'</p>
-                        <a href="#" class="btn btn-primary">Saber mas</a>
+                      
                     
           
                     </div>
@@ -146,12 +145,7 @@
                 <ul id="myTab" class="nav nav-tabs nav-justified">
                     <li class="active"><a href="#service-one" data-toggle="tab"><i class="fa fa-tree"></i> Instalaci&oacute;n</a>
                     </li>
-                    <li class=""><a href="#service-two" data-toggle="tab"><i class="fa fa-car"></i> Paquetes</a>
-                    </li>
-                    <li class=""><a href="#service-three" data-toggle="tab"><i class="fa fa-support"></i> Service Three</a>
-                    </li>
-                    <li class=""><a href="#service-four" data-toggle="tab"><i class="fa fa-database"></i> Service Four</a>
-                    </li>
+                    
                 </ul>
 
                 <div id="myTabContent" class="tab-content">
@@ -164,11 +158,11 @@
                echo '
                         <p>*'.$value["Nombre"].'<br/>'.$value["Renta"].'</p>
                         <p style=height:30px;>'.$value["descripcion"].'</p>
-                    <a href="#" class="btn btn-primary">Conocer canales</a> ';
+                   ';
                 }
 
                     ?>
-
+ <a href="portfolio-3-col.php" class="btn btn-primary">Conocer canales</a> 
                     </div>
                     <div class="tab-pane fade" id="service-two">
                         <h4>Paquetes</h4>

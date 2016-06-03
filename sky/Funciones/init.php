@@ -1,6 +1,6 @@
 <?php
   require_once("MySQLServer.php");
-   $Connector=new MySQLServer("localhost","sky_read","skyread","sky_final");
+   $Connector=new MySQLServer("localhost","root","rawr","sky_final");
   $ruta="trabajotecnologias/images/producto/";
   $ruta2="trabajotecnologias/images/marcas/";
   $rutacat="trabajotecnologias/images/categorias/";

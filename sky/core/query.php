@@ -1092,21 +1092,37 @@ switch($nya){
       case 'view':
         try {
           $fecha=getGETPOST('date');
+          $tipo=getGETPOST('type');
           $data=array($fecha."%");
           //echo $fecha."fecha";
-          $sth = $DBH->prepare('
-            select pago.*,
-            cliente.nombre as cna, cliente.ap as cap, cliente.am as cam,
-            empleado.nombre as ena, empleado.ap as eap, empleado.am as eam,
-            proveedor.nombre as pna
-            from pago
-            left join cliente on pago.nocuenta = cliente.nocuenta
-            left join empleado on pago.idempleado = empleado.idempleado
-            left join proveedor on pago.idproveedor = proveedor.idproveedor
-            where pago.fecha like(?)
-            group by pago.idtransaccion
-            order by pago.fecha asc;
-          ');
+          if($tipo == 's'){
+            $sth = $DBH->prepare('
+              SELECT doservicio.* ,doservicio.fechaservicio as fecha,
+              cliente.nombre as cna, cliente.ap as cap, cliente.am as cam,
+              empleado.nombre as ena, empleado.ap as eap, empleado.am as eam,
+              servicio.nombre as concepto, servicio.costo as monto
+              from doservicio
+              left join cliente on doservicio.nocuenta = cliente.nocuenta
+              left join empleado on doservicio.idempleado = empleado.idempleado
+              left join servicio on doservicio.idservicio= servicio.idservicio
+              where doservicio.fechaservicio like ?
+              order by doservicio.fechaservicio desc, empleado.idempleado;
+            ');
+          } else  {
+            $sth = $DBH->prepare('
+              select pago.*,
+              cliente.nombre as cna, cliente.ap as cap, cliente.am as cam,
+              empleado.nombre as ena, empleado.ap as eap, empleado.am as eam,
+              proveedor.nombre as pna
+              from pago
+              left join cliente on pago.nocuenta = cliente.nocuenta
+              left join empleado on pago.idempleado = empleado.idempleado
+              left join proveedor on pago.idproveedor = proveedor.idproveedor
+              where pago.fecha like(?)
+              group by pago.idtransaccion
+              order by pago.fecha asc;
+            ');
+          }
           $sth->execute($data);
         } catch(PDOException $e){
           echo $e->getMessage();

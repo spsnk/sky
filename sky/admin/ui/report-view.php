@@ -60,6 +60,13 @@ include '../../core/query.php';
         break;
       }?>
     </a>
+    <?if($tipo == 's'){ ?>
+      <br>
+      <a title="Destino" id="date">
+      <div class="flechita"></div> 
+      Cliente: <?php echo $a['cna']." ".$a['cap']." ".$a['cam'];?>
+    </a>
+    <?}?>
     </div>
   <? } ?>
 </div>
