@@ -268,7 +268,7 @@ $('#buscatec').autocomplete({
           <input type="hidden" name="pakid" id="pakid" value required />
           <label for="subdt">Fecha de subscripción</label><br />
           <input type="date" name="subdt" id="subdt" tabindex="9"  required/> <br />
-          <input type="submit" class="boton" value="Agregar paquete" id="submit"/> 
+          <input type="submit" class="boton" value="Agregar Paquete" id="submit"/> 
           <script>
             document.getElementById('subdt').value = new Date().toISOString().slice(0,10);
           </script>
@@ -286,7 +286,7 @@ $('#buscatec').autocomplete({
           <input type="hidden" name="tecid" id="tecid" value required />
           <label for="serdt">Fecha de servicio</label><br />
           <input type="date" name="serdt" id="serdt" tabindex="9"  required/> <br />
-          <input type="submit" class="boton" value="Agregar paquete" id="submit"/> 
+          <input type="submit" class="boton" value="Agregar Servicio" id="submit"/> 
           <script>
             document.getElementById('serdt').value = new Date().toISOString().slice(0,10);
           </script>
